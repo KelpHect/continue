@@ -6,6 +6,7 @@ import { Editor, JSONContent } from "@tiptap/react";
 import { ChatHistoryItem, InputModifiers } from "core";
 import { renderChatMessage } from "core/util/messageContent";
 import {
+  RefObject,
   useCallback,
   useContext,
   useEffect,
@@ -147,8 +148,8 @@ export function Chat() {
   }, [isStreaming, jetbrains, isInEdit]);
 
   const { widget, highlights } = useFindWidget(
-    stepsDivRef,
-    tabsRef,
+    stepsDivRef as RefObject<HTMLDivElement>,
+    tabsRef as RefObject<HTMLDivElement>,
     isStreaming,
   );
 

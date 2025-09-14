@@ -20,7 +20,7 @@ interface ContextItemsPeekProps {
   contextItems?: ContextItemWithId[];
   isCurrentContextPeek: boolean;
   icon?: ComponentType<React.SVGProps<SVGSVGElement>>;
-  title?: JSX.Element | string;
+  title?: React.JSX.Element | string;
 }
 
 interface ContextItemsPeekItemProps {

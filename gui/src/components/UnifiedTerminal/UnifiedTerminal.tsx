@@ -154,7 +154,7 @@ function convertBundleIntoReact(
   useClasses: boolean,
   bundle: AnserJsonEntry,
   key: number,
-): JSX.Element {
+): React.JSX.Element {
   const className = useClasses ? createClass(bundle) : null;
   const decorationProp = bundle.decoration
     ? String(bundle.decoration)

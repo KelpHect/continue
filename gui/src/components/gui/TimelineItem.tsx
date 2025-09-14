@@ -30,8 +30,8 @@ interface TimelineItemProps {
   item: ChatHistoryItem;
   open: boolean;
   onToggle: () => void;
-  children: JSX.Element;
-  iconElement?: JSX.Element;
+  children: React.JSX.Element;
+  iconElement?: React.JSX.Element;
 }
 
 function TimelineItem(props: TimelineItemProps) {
