@@ -15,7 +15,7 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "noEmitOnError": false,
-    "types": ["node"],
+    "types": ["node", "vitest/globals"],
     "outDir": "dist",
     "declaration": true,
     "declarationMap": true
