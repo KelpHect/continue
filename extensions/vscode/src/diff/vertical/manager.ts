@@ -50,7 +50,7 @@ export class VerticalDiffManager {
     options: VerticalDiffHandlerOptions,
   ): VerticalDiffHandler | undefined {
     if (this.fileUriToHandler.has(fileUri)) {
-      this.fileUriToHandler.get(fileUri)?.clear(false);
+      void this.fileUriToHandler.get(fileUri)?.clear(false);
       this.fileUriToHandler.delete(fileUri);
     }
     const editor = vscode.window.activeTextEditor; // TODO might cause issues if user switches files
@@ -138,7 +138,7 @@ export class VerticalDiffManager {
 
     const handler = this.fileUriToHandler.get(fileUri);
     if (handler) {
-      handler.clear(accept);
+      void handler.clear(accept);
       this.fileUriToHandler.delete(fileUri);
     }
 
@@ -225,7 +225,7 @@ export class VerticalDiffManager {
     // Check for existing handlers in the same file the new one will be created in
     const existingHandler = this.getHandlerForFile(fileUri);
     if (existingHandler) {
-      existingHandler.clear(false);
+      void existingHandler.clear(false);
     }
 
     await new Promise((resolve) => {

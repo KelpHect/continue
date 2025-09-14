@@ -20,7 +20,7 @@ async function dynamicImportAndActivate(context: vscode.ExtensionContext) {
 export function activate(context: vscode.ExtensionContext) {
   return dynamicImportAndActivate(context).catch((e) => {
     console.log("Error activating extension: ", e);
-    Telemetry.capture(
+    void Telemetry.capture(
       "vscode_extension_activation_error",
       {
         stack: extractMinimalStackTraceInfo(e.stack),

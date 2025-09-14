@@ -30,6 +30,8 @@ import {
   SelectionChangeManager,
 } from "../activation/SelectionChangeManager";
 import { ContinueCompletionProvider } from "../autocomplete/completionProvider";
+import { GhostTextAcceptanceTracker } from "../autocomplete/GhostTextAcceptanceTracker";
+import { getDefinitionsFromLsp } from "../autocomplete/lsp";
 import {
   monitorBatteryChanges,
   setupStatusBar,
@@ -50,6 +52,7 @@ import {
   WorkOsAuthProvider,
 } from "../stubs/WorkOsAuthProvider";
 import { Battery } from "../util/battery";
+import { handleTextDocumentChange } from "../util/editLoggingUtils";
 import { FileSearch } from "../util/FileSearch";
 import { VsCodeIdeUtils } from "../util/ideUtils";
 import { VsCodeIde } from "../VsCodeIde";
@@ -58,9 +61,6 @@ import { ConfigYamlDocumentLinkProvider } from "./ConfigYamlDocumentLinkProvider
 import { VsCodeMessenger } from "./VsCodeMessenger";
 
 
-import { GhostTextAcceptanceTracker } from "../autocomplete/GhostTextAcceptanceTracker";
-import { getDefinitionsFromLsp } from "../autocomplete/lsp";
-import { handleTextDocumentChange } from "../util/editLoggingUtils";
 
 import type { VsCodeWebviewProtocol } from "../webviewProtocol";
 
@@ -301,11 +301,9 @@ export class VsCodeExtension {
     );
     resolveVerticalDiffManager?.(this.verticalDiffManager);
 
-    void setupRemoteConfigSync(() =>
-      this.configHandler.reloadConfig.bind(this.configHandler)(
-        "Remote config sync",
-      ),
-    );
+    void setupRemoteConfigSync(() => {
+      void this.configHandler.reloadConfig("Remote config sync");
+    });
 
     void this.configHandler.loadConfig().then(async ({ config }) => {
       const shouldUseFullFileDiff = await getUsingFullFileDiff();
@@ -323,25 +321,27 @@ export class VsCodeExtension {
     });
 
     this.configHandler.onConfigUpdate(
-      async ({ config: newConfig, configLoadInterrupted }) => {
-        const shouldUseFullFileDiff = await getUsingFullFileDiff();
-        this.completionProvider.updateUsingFullFileDiff(shouldUseFullFileDiff);
-        selectionManager.updateUsingFullFileDiff(shouldUseFullFileDiff);
+      ({ config: newConfig, configLoadInterrupted }) => {
+        void (async () => {
+          const shouldUseFullFileDiff = await getUsingFullFileDiff();
+          this.completionProvider.updateUsingFullFileDiff(shouldUseFullFileDiff);
+          selectionManager.updateUsingFullFileDiff(shouldUseFullFileDiff);
 
-        await this.updateNextEditState(context);
+          await this.updateNextEditState(context);
 
-        if (configLoadInterrupted) {
-          // Show error in status bar
-          setupStatusBar(undefined, undefined, true);
-        } else if (newConfig) {
-          setupStatusBar(undefined, undefined, false);
+          if (configLoadInterrupted) {
+            // Show error in status bar
+            setupStatusBar(undefined, undefined, true);
+          } else if (newConfig) {
+            setupStatusBar(undefined, undefined, false);
 
-          registerAllCodeLensProviders(
-            context,
-            this.verticalDiffManager.fileUriToCodeLens,
-            newConfig,
-          );
-        }
+            registerAllCodeLensProviders(
+              context,
+              this.verticalDiffManager.fileUriToCodeLens,
+              newConfig,
+            );
+          }
+        })();
       },
     );
 
@@ -436,11 +436,11 @@ export class VsCodeExtension {
 
     // Listen for file saving - use global file watcher so that changes
     // from outside the window are also caught
-    fs.watchFile(getConfigJsonPath(), { interval: 1000 }, async (stats) => {
+    fs.watchFile(getConfigJsonPath(), { interval: 1000 }, (stats) => {
       if (stats.size === 0) {
         return;
       }
-      await this.configHandler.reloadConfig(
+      void this.configHandler.reloadConfig(
         "Global JSON config updated - fs file watch",
       );
     });
@@ -448,11 +448,11 @@ export class VsCodeExtension {
     fs.watchFile(
       getConfigYamlPath("vscode"),
       { interval: 1000 },
-      async (stats) => {
+      (stats) => {
         if (stats.size === 0) {
           return;
         }
-        await this.configHandler.reloadConfig(
+        void this.configHandler.reloadConfig(
           "Global YAML config updated - fs file watch",
         );
       },
@@ -539,7 +539,7 @@ export class VsCodeExtension {
         );
 
         if (e.provider.id === "github") {
-          this.configHandler.reloadConfig("Github sign-in status changed");
+          void this.configHandler.reloadConfig("Github sign-in status changed");
         }
       }
     });
@@ -558,16 +558,17 @@ export class VsCodeExtension {
 
     // Refresh index when branch is changed
     void this.ide.getWorkspaceDirs().then((dirs) =>
-      dirs.forEach(async (dir) => {
-        const repo = await this.ide.getRepo(dir);
-        if (repo) {
-          repo.state.onDidChange(() => {
-            // args passed to this callback are always undefined, so keep track of previous branch
-            const currentBranch = repo?.state?.HEAD?.name;
-            if (currentBranch) {
-              if (this.PREVIOUS_BRANCH_FOR_WORKSPACE_DIR[dir]) {
-                if (
-                  currentBranch !== this.PREVIOUS_BRANCH_FOR_WORKSPACE_DIR[dir]
+      dirs.forEach((dir) => {
+        void (async () => {
+          const repo = await this.ide.getRepo(dir);
+          if (repo) {
+            repo.state.onDidChange(() => {
+              // args passed to this callback are always undefined, so keep track of previous branch
+              const currentBranch = repo?.state?.HEAD?.name;
+              if (currentBranch) {
+                if (this.PREVIOUS_BRANCH_FOR_WORKSPACE_DIR[dir]) {
+                  if (
+                    currentBranch !== this.PREVIOUS_BRANCH_FOR_WORKSPACE_DIR[dir]
                 ) {
                   // Trigger refresh of index only in this directory
                   this.core.invoke("index/forceReIndex", { dirs: [dir] });
@@ -578,6 +579,7 @@ export class VsCodeExtension {
             }
           });
         }
+        })();
       }),
     );
 
