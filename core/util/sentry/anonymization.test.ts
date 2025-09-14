@@ -161,7 +161,7 @@ describe("Sentry Anonymization Utilities", () => {
 
       // Mock console.error to avoid noise in tests
       const originalConsoleError = console.error;
-      console.error = jest.fn();
+      console.error = vi.fn();
 
       const result = anonymizeSentryEvent(circularEvent);
 

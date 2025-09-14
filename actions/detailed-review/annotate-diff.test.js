@@ -1,4 +1,4 @@
-const { annotateDiff } = require("./annotate-diff.js");
+import { annotateDiff } from "./annotate-diff.js";
 
 describe("annotateDiff", () => {
   test("single file, single hunk", () => {

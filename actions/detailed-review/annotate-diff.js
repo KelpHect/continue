@@ -89,8 +89,8 @@ function main() {
   console.log(annotated);
 }
 
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   main();
 }
 
-module.exports = { annotateDiff };
+export { annotateDiff };

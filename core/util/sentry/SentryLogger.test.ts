@@ -270,7 +270,7 @@ describe("Sentry Utility Functions", () => {
 
   describe("createSpan", () => {
     it("should execute callback normally when telemetry is disabled", () => {
-      const callback = jest.fn().mockReturnValue("test-result");
+      const callback = vi.fn().mockReturnValue("test-result");
 
       const result = createSpan("test.operation", "test span", callback);
 
@@ -289,7 +289,7 @@ describe("Sentry Utility Functions", () => {
         "test@continue.dev",
       );
 
-      const callback = jest.fn().mockReturnValue("test-result");
+      const callback = vi.fn().mockReturnValue("test-result");
       const result = createSpan("test.operation", "test span", callback);
 
       expect(result).toBe("test-result");
@@ -309,7 +309,7 @@ describe("Sentry Utility Functions", () => {
         "test@continue.dev",
       );
 
-      const asyncCallback = jest.fn().mockResolvedValue("async-result");
+      const asyncCallback = vi.fn().mockResolvedValue("async-result");
       const result = await createSpan(
         "test.operation",
         "test span",
@@ -431,7 +431,7 @@ describe("Sentry Utility Functions", () => {
       // Start with telemetry disabled
       expect(initializeSentry().client).toBeUndefined();
 
-      const callback = jest.fn().mockReturnValue("result");
+      const callback = vi.fn().mockReturnValue("result");
       createSpan("test", "test", callback);
       expect(callback).toHaveBeenCalled();
 
@@ -449,7 +449,7 @@ describe("Sentry Utility Functions", () => {
       expect(sentryResult.scope).toBeDefined();
 
       // Functions should work without throwing
-      const callback2 = jest.fn().mockReturnValue("result2");
+      const callback2 = vi.fn().mockReturnValue("result2");
       const spanResult = createSpan("test2", "test2", callback2);
       expect(spanResult).toBe("result2");
       expect(callback2).toHaveBeenCalled();
@@ -821,7 +821,7 @@ describe("Sentry Data Anonymization Tests", () => {
 
       // Mock the anonymization to throw an error
       const originalConsoleError = console.error;
-      console.error = jest.fn();
+      console.error = vi.fn();
 
       const result = anonymizeSentryEvent(circularEvent);
 

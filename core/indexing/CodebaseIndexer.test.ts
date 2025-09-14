@@ -1,6 +1,6 @@
 /* eslint-disable max-lines-per-function */
 /* lint is not useful for test classes */
-import { jest } from "@jest/globals";
+import { vi, type MockedFunction } from "vitest";
 import { execSync } from "node:child_process";
 import fs from "node:fs";
 import path from "path";
@@ -27,7 +27,7 @@ import { TestCodebaseIndex } from "./TestCodebaseIndex.js";
 import { CodebaseIndex } from "./types.js";
 import { walkDir, walkDirCache } from "./walkDir.js";
 
-jest.useFakeTimers();
+vi.useFakeTimers();
 
 const TEST_TS = `\
 function main() {
@@ -78,11 +78,11 @@ class TestCodebaseIndexer extends CodebaseIndexer {
 
 // Create a mock messenger type that doesn't require actual protocol imports
 type MockMessengerType = {
-  send: jest.Mock;
-  request: jest.Mock;
-  invoke: jest.Mock;
-  on: jest.Mock;
-  onError: jest.Mock;
+  send: vi.Mock;
+  request: vi.Mock;
+  invoke: vi.Mock;
+  on: vi.Mock;
+  onError: vi.Mock;
 };
 
 // These are more like integration tests, whereas we should separately test
@@ -90,11 +90,11 @@ type MockMessengerType = {
 describe("CodebaseIndexer", () => {
   // Replace mockProgressReporter with mockMessenger
   const mockMessenger: MockMessengerType = {
-    send: jest.fn(),
-    request: jest.fn(async () => {}),
-    invoke: jest.fn(),
-    on: jest.fn(),
-    onError: jest.fn(),
+    send: vi.fn(),
+    request: vi.fn(async () => {}),
+    invoke: vi.fn(),
+    on: vi.fn(),
+    onError: vi.fn(),
   };
 
   let codebaseIndexer: TestCodebaseIndexer;
@@ -126,7 +126,7 @@ describe("CodebaseIndexer", () => {
 
   afterEach(() => {
     walkDirCache.invalidate();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function refreshIndex() {
@@ -290,7 +290,7 @@ describe("CodebaseIndexer", () => {
 
     // Simplified tests to focus on behavior, not implementation details
     test("should call messenger with progress updates when refreshing codebase index", async () => {
-      jest
+      vi
         .spyOn(codebaseIndexer as any, "refreshDirs")
         .mockImplementation(async function* () {
           yield { status: "done", progress: 1, desc: "Completed" };
@@ -308,7 +308,7 @@ describe("CodebaseIndexer", () => {
     });
 
     test("should call messenger with progress updates when refreshing specific files", async () => {
-      jest
+      vi
         .spyOn(codebaseIndexer as any, "refreshFiles")
         .mockImplementation(async function* () {
           yield { status: "done", progress: 1, desc: "Completed" };
@@ -327,14 +327,14 @@ describe("CodebaseIndexer", () => {
 
     test("should abort previous indexing when starting a new one", async () => {
       // Set up a situation where indexingCancellationController exists
-      const mockAbort = jest.fn();
+      const mockAbort = vi.fn();
       const controller = { abort: mockAbort, signal: { aborted: false } };
 
       // Access the private property in a type-safe way for testing
       (codebaseIndexer as any).indexingCancellationController = controller;
 
       // Mock refreshDirs to return immediately
-      jest
+      vi
         .spyOn(codebaseIndexer as any, "refreshDirs")
         .mockImplementation(async function* () {
           yield { status: "done", progress: 1, desc: "Completed" };
@@ -351,12 +351,12 @@ describe("CodebaseIndexer", () => {
       const testError = new Error("Test indexing error");
 
       // Mock console.log to avoid printing errors
-      const consoleLogSpy = jest
+      const consoleLogSpy = vi
         .spyOn(console, "log")
         .mockImplementation(() => {});
 
       // Mock refreshDirs to throw an error
-      jest
+      vi
         .spyOn(codebaseIndexer as any, "refreshDirs")
         .mockImplementation(() => {
           throw testError;
@@ -390,10 +390,10 @@ describe("CodebaseIndexer", () => {
       const llmError = new LLMError("Test LLM error", mockLlm);
 
       // Mock console.log to avoid printing errors
-      jest.spyOn(console, "log").mockImplementation(() => {});
+      vi.spyOn(console, "log").mockImplementation(() => {});
 
       // Mock refreshDirs to throw an LLMError
-      jest
+      vi
         .spyOn(codebaseIndexer as any, "refreshDirs")
         .mockImplementation(() => {
           throw llmError;
@@ -423,7 +423,7 @@ describe("CodebaseIndexer", () => {
       };
 
       // Mock refreshDirs to set a specific state
-      jest
+      vi
         .spyOn(codebaseIndexer as any, "refreshDirs")
         .mockImplementation(async function* () {
           yield testState;
@@ -449,8 +449,8 @@ describe("CodebaseIndexer", () => {
       await testIndex.clearDatabase();
     });
     let testIndexer: TestCodebaseIndexer;
-    let mockRefreshCodebaseIndex: jest.MockedFunction<any>;
-    let mockGetWorkspaceDirs: jest.MockedFunction<any>;
+    let mockRefreshCodebaseIndex: MockedFunction<any>;
+    let mockGetWorkspaceDirs: MockedFunction<any>;
 
     beforeEach(() => {
       testIndexer = new TestCodebaseIndexer(
@@ -461,18 +461,18 @@ describe("CodebaseIndexer", () => {
       );
 
       // Mock the refreshCodebaseIndex method to avoid actual indexing
-      mockRefreshCodebaseIndex = jest
+      mockRefreshCodebaseIndex = vi
         .spyOn(testIndexer, "refreshCodebaseIndex")
         .mockImplementation(async () => {});
 
       // Mock getWorkspaceDirs to return test directories
-      mockGetWorkspaceDirs = jest
+      mockGetWorkspaceDirs = vi
         .spyOn(testIde, "getWorkspaceDirs")
         .mockResolvedValue(["/test/workspace"]);
     });
 
     afterEach(() => {
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
 
     describe("hasIndexingProvider", () => {
@@ -709,13 +709,13 @@ describe("CodebaseIndexer", () => {
           contextProviders: [],
         };
 
-        jest
+        vi
           .spyOn(testIde, "getIdeSettings")
           .mockResolvedValue(mockIdeSettings);
       });
 
       afterEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
       });
 
       test("should create specific indexTypes for the requested context providers", async () => {
@@ -727,7 +727,7 @@ describe("CodebaseIndexer", () => {
           },
         ];
 
-        jest.spyOn(testConfigHandler, "loadConfig").mockResolvedValue({
+        vi.spyOn(testConfigHandler, "loadConfig").mockResolvedValue({
           config: mockConfig,
           errors: [],
           configLoadInterrupted: false,
@@ -756,7 +756,7 @@ describe("CodebaseIndexer", () => {
           },
         ];
 
-        jest.spyOn(testConfigHandler, "loadConfig").mockResolvedValue({
+        vi.spyOn(testConfigHandler, "loadConfig").mockResolvedValue({
           config: mockConfig,
           errors: [],
           configLoadInterrupted: false,
@@ -772,7 +772,7 @@ describe("CodebaseIndexer", () => {
 
   describe("wasAnyOneIndexAdded", () => {
     let testIndexer: TestCodebaseIndexer;
-    let mockGetIndexesToBuild: jest.MockedFunction<any>;
+    let mockGetIndexesToBuild: MockedFunction<any>;
 
     beforeEach(() => {
       testIndexer = new TestCodebaseIndexer(
@@ -783,17 +783,17 @@ describe("CodebaseIndexer", () => {
       );
 
       // Mock getIndexesToBuild to control what indexes should be built
-      mockGetIndexesToBuild = jest
+      mockGetIndexesToBuild = vi
         .spyOn(testIndexer as any, "getIndexesToBuild")
         .mockResolvedValue([]);
 
-      jest
+      vi
         .spyOn(testIndexer, "refreshCodebaseIndex")
         .mockImplementation(async () => {});
     });
 
     afterEach(() => {
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
 
     test("should return true when indexes to build differ from built indexes", async () => {

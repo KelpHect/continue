@@ -15,7 +15,7 @@ describe("processTerminalBackgroundStates", () => {
 
     if (backgroundedProcesses) {
       // Reset the map by reimporting the module
-      jest.resetModules();
+      vi.resetModules();
     }
   });
 

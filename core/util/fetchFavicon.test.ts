@@ -8,7 +8,7 @@ import {
 
 describe("findFaviconPath", () => {
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   it("should return the favicon URL when a favicon link is present", async () => {
@@ -22,10 +22,10 @@ describe("findFaviconPath", () => {
     `;
     const mockResponse = {
       ok: true,
-      text: jest.fn().mockResolvedValue(mockHtml),
+      text: vi.fn().mockResolvedValue(mockHtml),
     };
 
-    global.fetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = vi.fn().mockResolvedValue(mockResponse);
 
     const url = new URL("https://example.com");
     const faviconPath = await findFaviconPath(url);
@@ -43,10 +43,10 @@ describe("findFaviconPath", () => {
     `;
     const mockResponse = {
       ok: true,
-      text: jest.fn().mockResolvedValue(mockHtml),
+      text: vi.fn().mockResolvedValue(mockHtml),
     };
 
-    global.fetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = vi.fn().mockResolvedValue(mockResponse);
 
     const url = new URL("https://example.com");
     const faviconPath = await findFaviconPath(url);
@@ -56,7 +56,7 @@ describe("findFaviconPath", () => {
   });
 
   it("should handle fetch errors gracefully and return undefined", async () => {
-    global.fetch = jest.fn().mockRejectedValue(new Error("Network error"));
+    global.fetch = vi.fn().mockRejectedValue(new Error("Network error"));
 
     const url = new URL("https://example.com");
     const faviconPath = await findFaviconPath(url);
@@ -71,7 +71,7 @@ describe("findFaviconPath", () => {
       status: 404,
     };
 
-    global.fetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = vi.fn().mockResolvedValue(mockResponse);
 
     const url = new URL("https://example.com");
     const faviconPath = await findFaviconPath(url);
@@ -91,10 +91,10 @@ describe("findFaviconPath", () => {
     `;
     const mockResponse = {
       ok: true,
-      text: jest.fn().mockResolvedValue(mockHtml),
+      text: vi.fn().mockResolvedValue(mockHtml),
     };
 
-    global.fetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = vi.fn().mockResolvedValue(mockResponse);
 
     const url = new URL("https://example.com");
     const faviconPath = await findFaviconPath(url);
@@ -106,7 +106,7 @@ describe("findFaviconPath", () => {
 
 describe("getFaviconBase64", () => {
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   it("should return base64 data URI of the favicon", async () => {
@@ -114,14 +114,14 @@ describe("getFaviconBase64", () => {
     const arrayBuffer = new TextEncoder().encode(iconData).buffer;
     const mockResponse = {
       ok: true,
-      arrayBuffer: jest.fn().mockResolvedValue(arrayBuffer),
+      arrayBuffer: vi.fn().mockResolvedValue(arrayBuffer),
       headers: {
-        get: jest.fn().mockReturnValue("image/png"),
+        get: vi.fn().mockReturnValue("image/png"),
       },
     };
 
-    global.fetch = jest.fn().mockResolvedValue(mockResponse);
-    global.btoa = jest
+    global.fetch = vi.fn().mockResolvedValue(mockResponse);
+    global.btoa = vi
       .fn()
       .mockImplementation((str) =>
         Buffer.from(str, "binary").toString("base64"),
@@ -137,7 +137,7 @@ describe("getFaviconBase64", () => {
   });
 
   it("should handle fetch errors gracefully and return undefined", async () => {
-    global.fetch = jest.fn().mockRejectedValue(new Error("Network error"));
+    global.fetch = vi.fn().mockRejectedValue(new Error("Network error"));
 
     const faviconUrl = "https://example.com/favicon.ico";
     const base64DataUri = await getFaviconBase64(faviconUrl);
@@ -152,7 +152,7 @@ describe("getFaviconBase64", () => {
       status: 404,
     };
 
-    global.fetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = vi.fn().mockResolvedValue(mockResponse);
 
     const faviconUrl = "https://example.com/favicon.ico";
     const base64DataUri = await getFaviconBase64(faviconUrl);
@@ -166,14 +166,14 @@ describe("getFaviconBase64", () => {
     const arrayBuffer = new TextEncoder().encode(iconData).buffer;
     const mockResponse = {
       ok: true,
-      arrayBuffer: jest.fn().mockResolvedValue(arrayBuffer),
+      arrayBuffer: vi.fn().mockResolvedValue(arrayBuffer),
       headers: {
-        get: jest.fn().mockReturnValue(null),
+        get: vi.fn().mockReturnValue(null),
       },
     };
 
-    global.fetch = jest.fn().mockResolvedValue(mockResponse);
-    global.btoa = jest
+    global.fetch = vi.fn().mockResolvedValue(mockResponse);
+    global.btoa = vi
       .fn()
       .mockImplementation((str) =>
         Buffer.from(str, "binary").toString("base64"),
@@ -191,7 +191,7 @@ describe("getFaviconBase64", () => {
 
 describe("fetchFavicon", () => {
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   it("should return base64 data URI of the favicon when favicon is found", async () => {
@@ -208,7 +208,7 @@ describe("fetchFavicon", () => {
     `;
     const homepageResponse = {
       ok: true,
-      text: jest.fn().mockResolvedValue(homepageHtml),
+      text: vi.fn().mockResolvedValue(homepageHtml),
     };
 
     // Mock fetch for favicon
@@ -216,18 +216,18 @@ describe("fetchFavicon", () => {
     const arrayBuffer = new TextEncoder().encode(iconData).buffer;
     const faviconResponse = {
       ok: true,
-      arrayBuffer: jest.fn().mockResolvedValue(arrayBuffer),
+      arrayBuffer: vi.fn().mockResolvedValue(arrayBuffer),
       headers: {
-        get: jest.fn().mockReturnValue("image/png"),
+        get: vi.fn().mockReturnValue("image/png"),
       },
     };
 
-    const fetchMock = jest.fn();
+    const fetchMock = vi.fn();
     fetchMock.mockResolvedValueOnce(homepageResponse); // First fetch call
     fetchMock.mockResolvedValueOnce(faviconResponse); // Second fetch call
 
     global.fetch = fetchMock;
-    global.btoa = jest
+    global.btoa = vi
       .fn()
       .mockImplementation((str) =>
         Buffer.from(str, "binary").toString("base64"),
@@ -257,10 +257,10 @@ describe("fetchFavicon", () => {
     `;
     const homepageResponse = {
       ok: true,
-      text: jest.fn().mockResolvedValue(homepageHtml),
+      text: vi.fn().mockResolvedValue(homepageHtml),
     };
 
-    const fetchMock = jest.fn();
+    const fetchMock = vi.fn();
     fetchMock.mockResolvedValueOnce(homepageResponse); // First fetch call
 
     global.fetch = fetchMock;

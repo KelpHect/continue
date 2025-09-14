@@ -1,4 +1,4 @@
-import { jest } from "@jest/globals";
+import { vi } from "vitest";
 import Anthropic from "../Anthropic.js";
 import Deepseek from "../Deepseek.js";
 import FunctionNetwork from "../FunctionNetwork.js";
@@ -8,10 +8,9 @@ import ContinueProxy from "../stubs/ContinueProxy.js";
 import Vllm from "../Vllm.js";
 
 // Mock the parseProxyModelName function
-const mockParseProxyModelName = jest.fn();
-jest.mock("@continuedev/config-yaml", () => ({
-  parseProxyModelName: mockParseProxyModelName,
-  decodeSecretLocation: jest.fn(),
+vi.mock("@continuedev/config-yaml", () => ({
+  parseProxyModelName: vi.fn(),
+  decodeSecretLocation: vi.fn(),
   SecretType: { NotFound: "not-found" },
 }));
 

@@ -1,4 +1,4 @@
-import { jest } from "@jest/globals";
+import { vi } from "vitest";
 
 import { testIde } from "../test/fixtures";
 import {
@@ -29,7 +29,7 @@ describe.skip("CodeSnippetsCodebaseIndex", () => {
   });
 
   it("should update the index and maintain expected database state", async () => {
-    const mockMarkComplete = jest
+    const mockMarkComplete = vi
       .fn()
       .mockImplementation(() => Promise.resolve()) as any;
 
@@ -43,7 +43,7 @@ describe.skip("CodeSnippetsCodebaseIndex", () => {
 
     // We mock this fn since currently in testing the directory structure to access the tree-sitter
     // binaries does not match what is in the release environment.
-    jest
+    vi
       .spyOn(CodeSnippetsCodebaseIndex.prototype, "getSnippetsInFile")
       .mockResolvedValue([mockSnippet]);
 

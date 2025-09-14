@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import {
   ChatMessage,
   Chunk,
@@ -7,18 +8,28 @@ import {
 import Bedrock from "./Bedrock.js";
 
 // Mock AWS SDK
-jest.mock("@aws-sdk/client-bedrock-runtime", () => ({
-  BedrockRuntimeClient: jest.fn().mockImplementation(() => ({
-    send: jest.fn(),
-    middlewareStack: { add: jest.fn() },
+vi.mock("@aws-sdk/client-bedrock-runtime", () => ({
+  BedrockRuntimeClient: vi.fn().mockImplementation(() => ({
+    send: vi.fn(),
+    middlewareStack: { add: vi.fn() },
   })),
-  ConverseStreamCommand: jest.fn(),
-  InvokeModelCommand: jest.fn(),
+  ConverseStreamCommand: vi.fn(),
+  InvokeModelCommand: vi.fn(),
+  ConversationRole: {
+    USER: "user",
+    ASSISTANT: "assistant",
+  },
+  ImageFormat: {
+    JPEG: "jpeg",
+    PNG: "png",
+    GIF: "gif",
+    WEBP: "webp",
+  },
 }));
 
 // Mock credential provider
-jest.mock("@aws-sdk/credential-providers", () => ({
-  fromNodeProviderChain: jest.fn().mockImplementation(() => async () => ({
+vi.mock("@aws-sdk/credential-providers", () => ({
+  fromNodeProviderChain: vi.fn().mockImplementation(() => async () => ({
     accessKeyId: "test-access-key",
     secretAccessKey: "test-secret-key",
     sessionToken: "test-session-token",
@@ -89,7 +100,7 @@ class TestBedrock extends Bedrock {
 
 describe("Bedrock", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe("constructor", () => {

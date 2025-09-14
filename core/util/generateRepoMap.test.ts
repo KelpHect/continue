@@ -20,7 +20,7 @@ describe.skip("generateRepoMap", () => {
 
   afterEach(() => {
     tearDownTestDir();
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   it("should generate a repo map with signatures included", async () => {
@@ -34,7 +34,7 @@ describe.skip("generateRepoMap", () => {
     // Do not mock testIde.getWorkspaceDirs
 
     // Mock CodeSnippetsCodebaseIndex.getPathsAndSignatures
-    jest
+    vi
       .spyOn(CodeSnippetsCodebaseIndex, "getPathsAndSignatures")
       .mockImplementation(async (dirs, offset, limit) => {
         // Return test data
@@ -56,7 +56,7 @@ describe.skip("generateRepoMap", () => {
 
     // Set testLLM properties
     testLLM._contextLength = 2048;
-    testLLM.countTokens = jest.fn().mockReturnValue(10);
+    testLLM.countTokens = vi.fn().mockReturnValue(10);
 
     // Act
     const repoMapContent = await generateRepoMap(testLLM, testIde, {
@@ -100,7 +100,7 @@ describe.skip("generateRepoMap", () => {
     // Do not mock testIde.getWorkspaceDirs
 
     // Mock CodeSnippetsCodebaseIndex.getPathsAndSignatures
-    jest
+    vi
       .spyOn(CodeSnippetsCodebaseIndex, "getPathsAndSignatures")
       .mockImplementation(async (dirs, offset, limit) => {
         // Return test data
@@ -116,7 +116,7 @@ describe.skip("generateRepoMap", () => {
 
     // Set testLLM properties
     testLLM._contextLength = 2048;
-    testLLM.countTokens = jest.fn().mockReturnValue(10);
+    testLLM.countTokens = vi.fn().mockReturnValue(10);
 
     // Act
     const repoMapContent = await generateRepoMap(testLLM, testIde, {
@@ -154,7 +154,7 @@ describe.skip("generateRepoMap", () => {
     // Do not mock testIde.getWorkspaceDirs
 
     // Mock CodeSnippetsCodebaseIndex.getPathsAndSignatures
-    jest
+    vi
       .spyOn(CodeSnippetsCodebaseIndex, "getPathsAndSignatures")
       .mockImplementation(async (dirs, offset, limit) => {
         // Return test data
@@ -169,7 +169,7 @@ describe.skip("generateRepoMap", () => {
       });
 
     // Mock fs.promises.readFile to throw an error when reading file1.js
-    jest
+    vi
       .spyOn(fs.promises, "readFile")
       .mockImplementation((filePath, encoding) => {
         if (filePath === path.join(TEST_DIR, "file1.js")) {
@@ -179,13 +179,13 @@ describe.skip("generateRepoMap", () => {
       });
 
     // Spy on console.error
-    const consoleErrorSpy = jest
+    const consoleErrorSpy = vi
       .spyOn(console, "error")
       .mockImplementation(() => {});
 
     // Set testLLM properties
     testLLM._contextLength = 2048;
-    testLLM.countTokens = jest.fn().mockReturnValue(10);
+    testLLM.countTokens = vi.fn().mockReturnValue(10);
 
     // Act
     const repoMapContent = await generateRepoMap(testLLM, testIde, {
