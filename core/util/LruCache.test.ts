@@ -1,3 +1,4 @@
+import { vi, MockedFunction } from "vitest";
 import { PrecalculatedLruCache } from "./LruCache";
 
 describe("PrecalculatedLruCache", () => {

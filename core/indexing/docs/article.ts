@@ -141,18 +141,18 @@ export async function htmlPageToArticleWithChunks(
 
     const title = readability.title || subpath;
 
-    const titles = Array.from(dom.window.document.querySelectorAll("h2"));
+    const titles = Array.from(dom.window.document.querySelectorAll("h2")) as HTMLElement[];
 
     const article_components =
       titles.length > 0
         ? titles.map((titleElement) => {
             const title = titleElement.textContent || "";
             let body = "";
-            let nextSibling = titleElement.nextElementSibling;
+            let nextSibling = titleElement.nextElementSibling as HTMLElement | null;
 
             while (nextSibling && nextSibling.tagName !== "H2") {
-              body += nextSibling.textContent || "";
-              nextSibling = nextSibling.nextElementSibling;
+              body += nextSibling.textContent ?? "";
+              nextSibling = nextSibling.nextElementSibling as HTMLElement | null;
             }
 
             return { title, body };
@@ -160,7 +160,7 @@ export async function htmlPageToArticleWithChunks(
         : [
             {
               title: title,
-              body: readability.textContent,
+              body: readability.textContent ?? "",
             },
           ];
 

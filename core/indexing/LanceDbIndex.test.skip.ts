@@ -1,4 +1,4 @@
-import { jest } from "@jest/globals";
+import { vi } from "vitest";
 import lance from "vectordb";
 
 import { testConfigHandler, testIde } from "../test/fixtures";
@@ -13,7 +13,7 @@ import {
 } from "./test/indexing";
 import { IndexResultType } from "./types";
 
-jest.useFakeTimers();
+vi.useFakeTimers();
 
 describe.skip("ChunkCodebaseIndex", () => {
   let index: LanceDbIndex;
@@ -59,7 +59,7 @@ describe.skip("ChunkCodebaseIndex", () => {
     const devTag = { ...mockTag, branch: "dev" };
     const devTagTableName = index.tableNameForTag(devTag);
 
-    const mockMarkComplete = jest
+    const mockMarkComplete = vi
       .fn()
       .mockImplementation(() => Promise.resolve()) as any;
 

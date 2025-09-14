@@ -1,4 +1,4 @@
-import { expect, jest } from "@jest/globals";
+import { expect, vi } from "vitest";
 import { ILLM } from "../../index.js";
 
 export interface LlmTestCase {
@@ -25,7 +25,7 @@ export async function runLlmTest(testCase: LlmTestCase) {
     mockStream,
   } = testCase;
 
-  const mockFetch = jest.fn<any>();
+  const mockFetch = vi.fn<any>();
 
   if (mockStream) {
     const encoder = new TextEncoder();

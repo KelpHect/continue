@@ -133,7 +133,7 @@ export async function* llmStreamChat(
           break;
         }
 
-        const chunk = next.value;
+        const chunk = next.value as ChatMessage;
 
         yield chunk;
         next = await gen.next();
