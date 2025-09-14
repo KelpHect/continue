@@ -5,9 +5,9 @@
     "lib": ["DOM", "DOM.Iterable", "ESNext", "ES2021"],
     "allowJs": true,
     "skipLibCheck": true,
-    "esModuleInterop": false,
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "strict": true,
+    "strict": false,
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
     "moduleResolution": "Node",
@@ -15,11 +15,10 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "noEmitOnError": false,
-    "types": ["node", "vitest/globals"],
     "outDir": "dist",
     "declaration": true,
     "declarationMap": true
   },
   "include": ["./**/*.ts", "**/*.js", "./**/*.d.ts"],
-  "exclude": ["test", "dist", "**/*.test.ts", "**/*.spec.ts", "**/*.vitest.ts"]
+  "exclude": ["test", "dist", "__mocks__", "**/*.test.ts", "**/*.spec.ts", "**/*.vitest.ts", "**/test/**/*", "vitest.config.ts", "**/*.test.skip.ts"]
 }
