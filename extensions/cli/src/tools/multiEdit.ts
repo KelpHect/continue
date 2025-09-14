@@ -3,11 +3,6 @@ import * as path from "path";
 
 import { throwIfFileIsSecurityConcern } from "core/indexing/ignore.js";
 
-import { telemetryService } from "../telemetry/telemetryService.js";
-import {
-  calculateLinesOfCodeDiff,
-  getLanguageFromFilePath,
-} from "../telemetry/utils.js";
 
 import { editTool } from "./edit.js";
 import { readFilesSet, readFileTool } from "./readFile.js";
@@ -246,27 +241,7 @@ WARNINGS:
     editCount: number;
   }) => {
     try {
-      fs.writeFileSync(args.file_path, args.newContent, "utf-8");
-
-      // Get lines for telemetry
-      const { added, removed } = calculateLinesOfCodeDiff(
-        args.originalContent,
-        args.newContent,
-      );
-      const language = getLanguageFromFilePath(args.file_path);
-
-      if (added > 0) {
-        telemetryService.recordLinesOfCodeModified("added", added, language);
-      }
-      if (removed > 0) {
-        telemetryService.recordLinesOfCodeModified(
-          "removed",
-          removed,
-          language,
-        );
-      }
-
-      // Generate diff for result display
+      fs.writeFileSync(args.file_path, args.newContent, "utf-8");// Generate diff for result display
       const diff = generateDiff(
         args.originalContent,
         args.newContent,

@@ -9,7 +9,6 @@ import { processCommandFlags } from "../flags/flagProcessor.js";
 import { safeStdout } from "../init.js";
 import { configureLogger } from "../logger.js";
 import * as logging from "../logging.js";
-import { sentryService } from "../sentry.js";
 import { initializeServices, services } from "../services/index.js";
 import { serviceContainer } from "../services/ServiceContainer.js";
 import { ModelServiceState, SERVICE_NAMES } from "../services/types.js";
@@ -19,8 +18,6 @@ import {
   updateSessionTitle,
 } from "../session.js";
 import { streamChatResponse } from "../stream/streamChatResponse.js";
-import { posthogService } from "../telemetry/posthogService.js";
-import { telemetryService } from "../telemetry/telemetryService.js";
 import { startTUIChat } from "../ui/index.js";
 import { formatAnthropicError, formatError } from "../util/formatError.js";
 import { logger } from "../util/logger.js";
@@ -297,9 +294,6 @@ async function processMessage(
     return handleManualCompaction(chatHistory, model, llmApi, isHeadless);
   }
 
-  // Track user prompt
-  telemetryService.logUserPrompt(userInput.length, userInput);
-
   // Check if auto-compacting is needed BEFORE adding user message
   if (shouldAutoCompact(services.chatHistory.getHistory(), model)) {
     const newIndex = await handleAutoCompaction(
@@ -382,12 +376,6 @@ async function processMessage(
     } else {
       logger.error(`\n${chalk.red(`Error: ${formatError(error)}`)}`);
     }
-
-    sentryService.captureException(error, {
-      context: "chat_response",
-      isHeadless,
-      chatHistoryLength: services.chatHistory.getHistory().length,
-    });
     if (!isHeadless) {
       logger.info(
         chalk.dim(
@@ -484,13 +472,6 @@ export async function chat(prompt?: string, options: ChatOptions = {}) {
   logging.configureLogger({ headless: options.headless ?? false });
 
   try {
-    // Record session start
-    telemetryService.recordSessionStart();
-    await posthogService.capture("sessionStart", {});
-
-    // Start active time tracking
-    telemetryService.startActiveTime();
-
     // If not in headless mode, use unified initialization with TUI
     if (!options.headless) {
       // Process flags for TUI mode
@@ -541,13 +522,6 @@ export async function chat(prompt?: string, options: ChatOptions = {}) {
     const err = error instanceof Error ? error : new Error(String(error));
     // Use headless-aware error logging to ensure fatal errors are shown in headless mode
     logging.error(chalk.red(`Fatal error: ${formatError(err)}`));
-    sentryService.captureException(err, {
-      context: "chat_command_fatal",
-      headless: options.headless,
-    });
     process.exit(1);
-  } finally {
-    // Stop active time tracking
-    telemetryService.stopActiveTime();
   }
 }

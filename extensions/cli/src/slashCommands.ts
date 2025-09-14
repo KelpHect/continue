@@ -11,8 +11,6 @@ import { handleInit } from "./commands/init.js";
 import { handleInfoSlashCommand } from "./infoScreen.js";
 import { reloadService, SERVICE_NAMES, services } from "./services/index.js";
 import { getCurrentSession } from "./session.js";
-import { posthogService } from "./telemetry/posthogService.js";
-import { telemetryService } from "./telemetry/telemetryService.js";
 import { SlashCommandResult } from "./ui/hooks/useChat.types.js";
 
 type CommandHandler = (
@@ -47,14 +45,10 @@ async function handleHelp(_args: string[], _assistant: AssistantConfig) {
     chalk.white("Available Commands:"),
     `  Type ${chalk.cyan("/")} to see available slash commands`,
     `  Type ${chalk.cyan("!")} followed by a command to execute bash directly`,
-  ].join("\n");
-  posthogService.capture("useSlashCommand", { name: "help" });
-  return { output: helpMessage };
+  ].join("\n");  return { output: helpMessage };
 }
 
-async function handleLogin() {
-  posthogService.capture("useSlashCommand", { name: "login" });
-  try {
+async function handleLogin() {  try {
     const newAuthState = await services.auth.login();
     await reloadService(SERVICE_NAMES.AUTH);
 
@@ -78,9 +72,7 @@ async function handleLogin() {
   }
 }
 
-async function handleLogout() {
-  posthogService.capture("useSlashCommand", { name: "logout" });
-  try {
+async function handleLogout() {  try {
     await services.auth.logout();
     return {
       exit: true,
@@ -94,9 +86,7 @@ async function handleLogout() {
   }
 }
 
-function handleWhoami() {
-  posthogService.capture("useSlashCommand", { name: "whoami" });
-  if (isAuthenticated()) {
+function handleWhoami() {  if (isAuthenticated()) {
     const config = loadAuthConfig();
     if (config && isAuthenticatedConfig(config)) {
       return {
@@ -118,8 +108,6 @@ function handleWhoami() {
 }
 
 async function handleFork() {
-  posthogService.capture("useSlashCommand", { name: "fork" });
-
   try {
     const currentSession = getCurrentSession();
     const forkCommand = `cn --fork ${currentSession.sessionId}`;
@@ -147,39 +135,25 @@ async function handleFork() {
 
 const commandHandlers: Record<string, CommandHandler> = {
   help: handleHelp,
-  clear: () => {
-    posthogService.capture("useSlashCommand", { name: "clear" });
-    return { clear: true, output: "Chat history cleared" };
+  clear: () => {    return { clear: true, output: "Chat history cleared" };
   },
-  exit: () => {
-    posthogService.capture("useSlashCommand", { name: "exit" });
-    return { exit: true, output: "Goodbye!" };
+  exit: () => {    return { exit: true, output: "Goodbye!" };
   },
-  config: () => {
-    posthogService.capture("useSlashCommand", { name: "config" });
-    return { openConfigSelector: true };
+  config: () => {    return { openConfigSelector: true };
   },
   login: handleLogin,
   logout: handleLogout,
   whoami: handleWhoami,
   info: handleInfoSlashCommand,
   model: () => ({ openModelSelector: true }),
-  compact: () => {
-    posthogService.capture("useSlashCommand", { name: "compact" });
-    return { compact: true };
+  compact: () => {    return { compact: true };
   },
-  mcp: () => {
-    posthogService.capture("useSlashCommand", { name: "mcp" });
-    return { openMcpSelector: true };
+  mcp: () => {    return { openMcpSelector: true };
   },
-  resume: () => {
-    posthogService.capture("useSlashCommand", { name: "resume" });
-    return { openSessionSelector: true };
+  resume: () => {    return { openSessionSelector: true };
   },
   fork: handleFork,
-  init: (args, assistant) => {
-    posthogService.capture("useSlashCommand", { name: "init" });
-    return handleInit(args, assistant);
+  init: (args, assistant) => {    return handleInit(args, assistant);
   },
 };
 
@@ -203,10 +177,6 @@ export async function handleSlashCommands(
   }
 
   const [command, ...args] = input.slice(1).split(" ");
-
-  telemetryService.recordSlashCommand(command);
-  posthogService.capture("useSlashCommand", { name: command });
-
   const handler = commandHandlers[command];
   if (handler) {
     return await handler(args, assistant);

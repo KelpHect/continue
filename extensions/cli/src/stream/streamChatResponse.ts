@@ -11,7 +11,6 @@ import type {
 import { getServiceSync, SERVICE_NAMES, services } from "../services/index.js";
 import { systemMessageService } from "../services/SystemMessageService.js";
 import type { ToolPermissionServiceState } from "../services/ToolPermissionService.js";
-import { telemetryService } from "../telemetry/telemetryService.js";
 import { ToolCall } from "../tools/index.js";
 import {
   chatCompletionStreamWithBackoff,
@@ -24,7 +23,6 @@ import { handleAutoCompaction } from "./streamChatResponse.autoCompaction.js";
 import {
   processChunkContent,
   processToolCallDelta,
-  recordStreamTelemetry,
   trackFirstTokenTime,
 } from "./streamChatResponse.helpers.js";
 import {
@@ -228,14 +226,6 @@ export async function processStreamingResponse(
     }
 
     const responseEndTime = Date.now();
-    const cost = recordStreamTelemetry({
-      requestStartTime,
-      responseEndTime,
-      inputTokens,
-      outputTokens,
-      model,
-      tools,
-    });
     const totalDuration = responseEndTime - requestStartTime;
 
     logger.debug("Stream complete", {
@@ -244,20 +234,12 @@ export async function processStreamingResponse(
       toolCallsCount: toolCallsMap.size,
       inputTokens,
       outputTokens,
-      cost,
       duration: totalDuration,
     });
   } catch (error: any) {
     const errorDuration = Date.now() - requestStartTime;
 
     // Log failed API request
-    telemetryService.logApiRequest({
-      model: model.model,
-      durationMs: errorDuration,
-      success: false,
-      error: error.message || String(error),
-    });
-
     if (error.name === "AbortError" || abortController?.signal.aborted) {
       logger.debug("Stream aborted by user");
       return {

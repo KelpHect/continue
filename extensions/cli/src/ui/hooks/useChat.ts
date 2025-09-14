@@ -11,7 +11,6 @@ import {
   updateSessionHistory,
 } from "../../session.js";
 import { handleSlashCommands } from "../../slashCommands.js";
-import { telemetryService } from "../../telemetry/telemetryService.js";
 import { formatError } from "../../util/formatError.js";
 import { logger } from "../../util/logger.js";
 
@@ -300,8 +299,6 @@ export function useChat({
       ]);
     } finally {
       // Stop active time tracking
-      telemetryService.stopActiveTime();
-
       setAbortController(null);
       setIsWaitingForResponse(false);
       setResponseStartTime(null);

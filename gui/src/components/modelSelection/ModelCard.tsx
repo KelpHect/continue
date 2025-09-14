@@ -148,7 +148,7 @@ function ModelCard(props: ModelCardProps) {
         </div>
 
         {props.tags?.map((tag) => (
-          <ModelProviderTag key={typeof tag === 'string' ? tag : tag.name} tag={tag} />
+          <ModelProviderTag key={tag} tag={tag} />
         ))}
 
         <p>{props.description}</p>

@@ -36,7 +36,7 @@ export function ToolTip({
 
   const childrenWithTooltipId = cloneElement(children, {
     "data-tooltip-id": tooltipId,
-  });
+  } as Partial<React.HTMLAttributes<HTMLElement>>);
 
   return (
     <>

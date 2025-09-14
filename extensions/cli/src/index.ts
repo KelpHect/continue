@@ -17,7 +17,7 @@ import {
   validateFlags,
 } from "./flags/flagValidator.js";
 import { configureConsoleForHeadless, safeStderr } from "./init.js";
-import { sentryService } from "./sentry.js";
+
 import { addCommonOptions, mergeParentOptions } from "./shared-options.js";
 import { logger } from "./util/logger.js";
 import { readStdinSync } from "./util/stdin.js";
@@ -62,7 +62,6 @@ export function enableSigintHandler() {
       if (tuiUnmount) {
         tuiUnmount();
       }
-      await sentryService.flush();
       process.exit(0);
     } else {
       // First Ctrl+C or too much time elapsed - show exit message
@@ -91,18 +90,11 @@ export function shouldShowExitMessage(): boolean {
 // Add global error handlers to prevent uncaught errors from crashing the process
 process.on("unhandledRejection", (reason, promise) => {
   logger.error("Unhandled Rejection at:", { promise, reason });
-  sentryService.captureException(
-    reason instanceof Error ? reason : new Error(String(reason)),
-    {
-      promise: String(promise),
-    },
-  );
   // Don't exit the process, just log the error
 });
 
 process.on("uncaughtException", (error) => {
   logger.error("Uncaught Exception:", error);
-  sentryService.captureException(error);
   // Don't exit the process, just log the error
 });
 
@@ -326,13 +318,9 @@ try {
   program.parse();
 } catch (error) {
   console.error(error);
-  sentryService.captureException(
-    error instanceof Error ? error : new Error(String(error)),
-  );
   process.exit(1);
 }
 
 process.on("SIGTERM", async () => {
-  await sentryService.flush();
   process.exit(0);
 });

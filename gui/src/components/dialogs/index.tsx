@@ -13,7 +13,7 @@ interface TextDialogProps {
   showDialog: boolean;
   onEnter: () => void;
   onClose: () => void;
-  message?: string | JSX.Element;
+  message?: string | React.JSX.Element;
 }
 
 const ScreenCover = styled.div`

@@ -18,7 +18,7 @@ export type ToolGroupPolicies = { [toolGroupName: string]: ToolGroupPolicy };
 
 type UIState = {
   showDialog: boolean;
-  dialogMessage: string | JSX.Element | undefined;
+  dialogMessage: string | React.JSX.Element | undefined;
   dialogEntryOn: boolean;
   onboardingCard: OnboardingCardState;
   isExploreDialogOpen: boolean;
