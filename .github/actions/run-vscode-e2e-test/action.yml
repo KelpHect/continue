@@ -53,7 +53,7 @@ runs:
     - name: Build packages and download e2e dependencies
       shell: bash
       run: |
-        node ./scripts/build-packages.js
+        node ./scripts/build-packages.cjs
         if [ "${{ steps.storage-cache.outputs.cache-hit }}" != "true" ]; then
           cd core
           npm ci

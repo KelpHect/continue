@@ -175,7 +175,7 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('gui/package-lock.json') }}
 
       - name: Build packages (Unix)
-        run: cd ../.. && node ./scripts/build-packages.js
+        run: cd ../.. && node ./scripts/build-packages.cjs
 
       # npm install core
       - name: Install core node_modules

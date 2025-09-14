@@ -282,7 +282,7 @@
     {
       "label": "continue-packages:build",
       "type": "shell",
-      "command": "node ./scripts/build-packages.js",
+      "command": "node ./scripts/build-packages.cjs",
       "problemMatcher": [],
       "presentation": {
         "group": "build-tasks",
