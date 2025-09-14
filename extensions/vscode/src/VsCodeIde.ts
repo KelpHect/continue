@@ -14,6 +14,7 @@ import {
 import { Repository } from "./otherExtensions/git";
 import { SecretStorage } from "./stubs/SecretStorage";
 import { VsCodeIdeUtils } from "./util/ideUtils";
+import { getExtensionVersion, isExtensionPrerelease } from "./util/util";
 import { getExtensionUri, openEditorAndRevealRange } from "./util/vscode";
 import { VsCodeWebviewProtocol } from "./webviewProtocol";
 
@@ -32,7 +33,6 @@ import type {
   TerminalOptions,
   Thread,
 } from "core";
-import { getExtensionVersion, isExtensionPrerelease } from "./util/util";
 
 class VsCodeIde implements IDE {
   ideUtils: VsCodeIdeUtils;
@@ -317,7 +317,7 @@ class VsCodeIde implements IDE {
       new vscode.Position(startLine, 0),
       new vscode.Position(endLine, 0),
     );
-    openEditorAndRevealRange(vscode.Uri.parse(fileUri), range).then(
+    void openEditorAndRevealRange(vscode.Uri.parse(fileUri), range).then(
       (editor) => {
         // Select the lines
         editor.selection = new vscode.Selection(

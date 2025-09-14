@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/naming-convention */
+ 
 import { EXTENSION_NAME } from "core/control-plane/env";
 // @ts-ignore
 import svgBuilder from "svg-builder";

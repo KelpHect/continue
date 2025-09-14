@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/naming-convention */
+ 
 import * as fs from "node:fs";
 
 import { ContextMenuConfig, ILLM, ModelInstaller } from "core";
@@ -8,6 +8,7 @@ import { EXTENSION_NAME } from "core/control-plane/env";
 import { Core } from "core/core";
 import { walkDirAsync } from "core/indexing/walkDir";
 import { isModelInstaller } from "core/llm";
+import { NextEditLoggingService } from "core/nextEdit/NextEditLoggingService";
 import { startLocalOllama } from "core/util/ollamaHelper";
 import { getConfigJsonPath, getConfigYamlPath } from "core/util/paths";
 import { Telemetry } from "core/util/posthog";
@@ -16,7 +17,6 @@ import * as YAML from "yaml";
 
 import { convertJsonToYamlConfig } from "../../../packages/config-yaml/dist";
 
-import { NextEditLoggingService } from "core/nextEdit/NextEditLoggingService";
 import {
   getAutocompleteStatusBarDescription,
   getAutocompleteStatusBarTitle,

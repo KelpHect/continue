@@ -80,16 +80,16 @@ export class ContinueGUIWebviewViewProvider
 
     const inDevelopmentMode =
       context?.extensionMode === vscode.ExtensionMode.Development;
-    if (!inDevelopmentMode) {
+    if (inDevelopmentMode) {
+      scriptUri = "http://localhost:5173/src/main.tsx";
+      styleMainUri = "http://localhost:5173/src/index.css";
+    } else {
       scriptUri = panel.webview
         .asWebviewUri(vscode.Uri.joinPath(extensionUri, "gui/assets/index.js"))
         .toString();
       styleMainUri = panel.webview
         .asWebviewUri(vscode.Uri.joinPath(extensionUri, "gui/assets/index.css"))
         .toString();
-    } else {
-      scriptUri = "http://localhost:5173/src/main.tsx";
-      styleMainUri = "http://localhost:5173/src/index.css";
     }
 
     panel.webview.options = {
@@ -121,7 +121,7 @@ export class ContinueGUIWebviewViewProvider
         e.affectsConfiguration("workbench.preferredHighContrastLightColorTheme")
       ) {
         // Send new theme to GUI to update embedded Monaco themes
-        this.webviewProtocol?.request("setTheme", { theme: getTheme() });
+        void this.webviewProtocol?.request("setTheme", { theme: getTheme() });
       }
     });
 

@@ -1,15 +1,17 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-import { EXTENSION_NAME } from "core/control-plane/env";
+ 
 // @ts-ignore
-import * as vscode from "vscode";
 
 import { DiffChar, DiffLine } from "core";
 import { CodeRenderer } from "core/codeRenderer/CodeRenderer";
+import { EXTENSION_NAME } from "core/control-plane/env";
 import { myersCharDiff } from "core/diff/myers";
 import { getOffsetPositionAtLastNewLine } from "core/nextEdit/diff/diff";
 import { NextEditLoggingService } from "core/nextEdit/NextEditLoggingService";
 import { NextEditProvider } from "core/nextEdit/NextEditProvider";
+import * as vscode from "vscode";
+
 import { getThemeString } from "../util/getTheme";
+
 import {
   HandlerPriority,
   SelectionChangeManager,
@@ -914,9 +916,9 @@ export class NextEditWindowManager {
 
     // Clear the timeout while SVG is on the editor.
     if (this.currentDecoration && this.mostRecentCompletionId)
-      this.loggingService.cancelRejectionTimeoutButKeepCompletionId(
+      {this.loggingService.cancelRejectionTimeoutButKeepCompletionId(
         this.mostRecentCompletionId,
-      );
+      );}
   }
 
   private renderDeletions(editor: vscode.TextEditor, oldDiffChars: DiffChar[]) {

@@ -1,5 +1,6 @@
-import { expect } from "chai";
 import * as path from "path";
+
+import { expect } from "chai";
 
 // Simple test to verify the mocha setup works
 suite("Basic Test Suite", () => {

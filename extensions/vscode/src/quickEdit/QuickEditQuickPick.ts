@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/naming-convention */
+ 
 import { IDE, ILLM, RuleWithSource } from "core";
 import { ConfigHandler } from "core/config/ConfigHandler";
 import { DataLogger } from "core/data/log";
