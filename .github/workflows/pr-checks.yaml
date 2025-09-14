@@ -162,10 +162,10 @@ jobs:
           npx tsc --noEmit
           npm run lint
 
-      - name: Run vitest tests
+      - name: Run unit tests
         run: |
           cd extensions/vscode
-          npm run vitest
+          npm run test:unit
 
   get-packages-matrix:
     runs-on: ubuntu-latest
