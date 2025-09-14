@@ -146,10 +146,10 @@ const rspackConfig = {
                     const asset = compilation.assets[file];
                     let source = asset.source();
                     if (typeof source === 'string') {
-                      // Replace import.meta.url references
-                      source = source.replace(/import\.meta\.url/g, 'importMetaUrl');
+                      // Replace import.meta.url references (only actual code, not in strings/comments)
+                      source = source.replace(/\bimport\.meta\.url\b/g, 'importMetaUrl');
                       // Add importMetaUrl definition at the top
-                      const importMetaUrlDef = `const importMetaUrl = typeof document === 'undefined' ? require('url').pathToFileURL(__filename).href : document.currentScript && document.currentScript.src || new URL('${file}', document.baseURI).href;\n`;
+                      const importMetaUrlDef = `const importMetaUrl = typeof document === 'undefined' ? require('url').pathToFileURL(__filename).href : document.currentScript && document.currentScript.src || new URL('${file.replace(/'/g, "\\'")}', document.baseURI).href;\n`;
                       source = importMetaUrlDef + source;
                       compilation.assets[file] = {
                         source: () => source,
