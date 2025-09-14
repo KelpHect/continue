@@ -694,7 +694,7 @@
     "@types/follow-redirects": "^1.14.4",
     "@types/glob": "^8.1.0",
     "@types/mocha": "^10.0.10",
-    "@types/node": "16.x",
+    "@types/node": "^20.0.0",
     "@types/node-fetch": "^2.6.12",
     "@types/react-dom": "^19.1.6",
     "@types/request": "^2.48.8",
@@ -769,10 +769,5 @@
     "vscode-languageclient": "^8.0.2",
     "ws": "^8.13.0",
     "yarn": "^1.22.21"
-  },
-  "overrides": {
-    "vitest": {
-      "@types/node": "^16.18.119"
-    }
   }
 }

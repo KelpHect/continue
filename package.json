@@ -10,6 +10,7 @@
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md}\" --ignore-path .gitignore --ignore-path .prettierignore"
   },
   "devDependencies": {
+    "@types/node": "^20.0.0",
     "@typescript-eslint/parser": "^7.18.0",
     "concurrently": "^9.2.1",
     "eslint-plugin-import": "^2.32.0",
