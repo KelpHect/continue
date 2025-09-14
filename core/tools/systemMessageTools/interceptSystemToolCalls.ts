@@ -45,7 +45,7 @@ export async function* interceptSystemToolCalls(
 
       return result.value;
     } else {
-      for await (const message of result.value) {
+      for await (const message of result.value as ChatMessage[]) {
         if (abortController.signal.aborted || parseState?.done) {
           break;
         }

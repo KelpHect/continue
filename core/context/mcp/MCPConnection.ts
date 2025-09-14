@@ -208,7 +208,9 @@ class MCPConnection {
                     {},
                     { signal: timeoutController.signal },
                   );
-                  this.resources = resources;
+                  this.resources = resources.filter(r => 
+                    r.name !== undefined && r.uri !== undefined
+                  ) as MCPResource[];
                 } catch (e) {
                   let errorMessage = `Error loading resources for MCP Server ${this.options.name}`;
                   if (e instanceof Error) {
@@ -225,7 +227,9 @@ class MCPConnection {
                       { signal: timeoutController.signal },
                     );
 
-                  this.resourceTemplates = resourceTemplates;
+                  this.resourceTemplates = resourceTemplates.filter(rt => 
+                    rt.name !== undefined && rt.uriTemplate !== undefined
+                  ) as MCPResourceTemplate[];
                 } catch (e) {
                   let errorMessage = `Error loading resource templates for MCP Server ${this.options.name}`;
                   if (e instanceof Error) {
@@ -242,7 +246,9 @@ class MCPConnection {
                     {},
                     { signal: timeoutController.signal },
                   );
-                  this.tools = tools;
+                  this.tools = tools.filter(t => 
+                    t.name !== undefined
+                  ) as MCPTool[];
                 } catch (e) {
                   let errorMessage = `Error loading tools for MCP Server ${this.options.name}`;
                   if (e instanceof Error) {
@@ -259,7 +265,9 @@ class MCPConnection {
                     {},
                     { signal: timeoutController.signal },
                   );
-                  this.prompts = prompts;
+                  this.prompts = prompts.filter(p => 
+                    p.name !== undefined
+                  ) as MCPPrompt[];
                 } catch (e) {
                   let errorMessage = `Error loading prompts for MCP Server ${this.options.name}`;
                   if (e instanceof Error) {

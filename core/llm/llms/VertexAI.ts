@@ -178,7 +178,12 @@ class VertexAI extends BaseLLM {
       url.searchParams.set("key", this.apiKey);
     } else {
       const client = await this.clientPromise;
-      const result = await client?.getAccessToken();
+      if (!client) {
+        throw new Error(
+          "Could not get an access token. Set up your Google Application Default Credentials.",
+        );
+      }
+      const result = await client.getAccessToken();
       if (!result?.token) {
         throw new Error(
           "Could not get an access token. Set up your Google Application Default Credentials.",
@@ -499,7 +504,12 @@ class VertexAI extends BaseLLM {
 
   protected async _embed(chunks: string[]): Promise<number[][]> {
     const client = await this.clientPromise;
-    const result = await client?.getAccessToken();
+    if (!client) {
+      throw new Error(
+        "Could not get an access token. Set up your Google Application Default Credentials.",
+      );
+    }
+    const result = await client.getAccessToken();
     if (!result?.token) {
       throw new Error(
         "Could not get an access token. Set up your Google Application Default Credentials.",

@@ -56,7 +56,7 @@ class Bedrock extends BaseLLM {
     cacheWriteInputTokens: 0,
   };
 
-  public requestOptions: {
+  declare public requestOptions: {
     region?: string;
     credentials?: any;
     headers?: Record<string, string>;

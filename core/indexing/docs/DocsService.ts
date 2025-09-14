@@ -560,7 +560,7 @@ export default class DocsService {
           done = true;
           usedCrawler = result.value;
         } else {
-          const page = result.value;
+          const page = result.value as PageData;
           estimatedProgress += 1 / 2 ** (processedPages + 1);
 
           // NOTE - during "indexing" phase, check if aborted before each status update
