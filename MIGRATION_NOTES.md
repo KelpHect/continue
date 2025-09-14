@@ -6,7 +6,7 @@ This document outlines the migration from esbuild to Rspack across the Continue 
 
 The migration successfully converts the following components:
 - ✅ **GUI**: Already using Rspack (no changes needed)
-- ✅ **VSCode Extension**: Migrated from esbuild to Rspack 
+- ✅ **VSCode Extension**: Migrated from esbuild to Rspack
 - ✅ **CLI**: Migrated from esbuild to Rspack
 
 ## Changes Made
@@ -48,70 +48,3 @@ The migration successfully converts the following components:
 ### TypeScript Decorators
 
 Both configurations enable TypeScript decorators support:
-```js
-jsc: {
-  parser: {
-    syntax: "typescript",
-    decorators: true,
-  },
-  transform: {
-    decoratorMetadata: true,
-    legacyDecorator: true,
-  },
-}
-```
-
-### Import.meta.url Handling
-
-VSCode extension includes a custom plugin to handle `import.meta.url` for transformers.js compatibility.
-
-## Breaking Changes
-
-### Runtime Dependencies
-
-The CLI now requires these packages to be installed:
-- `comment-json`
-- `yaml` 
-- `dotenv`
-- `jsdom`
-- `@mozilla/readability`
-- `node-html-markdown`
-
-### Build Process
-
-1. **Local dependencies must be built first** for CLI:
-   ```bash
-   npm run build:local-deps
-   ```
-
-2. **Script names changed**:
-   - VSCode: `esbuild` → `build`
-   - CLI: `build:bundle` now uses Rspack
-
-## Performance
-
-### Build Times
-- VSCode Extension: ~400ms (similar to esbuild)
-- CLI: ~4s (bundling more dependencies)
-- GUI: ~6.5s (no change)
-
-### Bundle Sizes
-- VSCode Extension: Similar to esbuild (externalized)
-- CLI: 6.37MB (self-contained bundle)
-
-## Rollback Plan
-
-If needed, rollback by:
-1. Reverting script changes in `package.json` files
-2. Using the preserved esbuild scripts:
-   - VSCode: `npm run esbuild`
-   - CLI: `npm run build:bundle:esbuild`
-
-## Testing
-
-All components build successfully:
-- GUI: ✅ Builds with asset size warnings (expected)
-- VSCode Extension: ✅ Builds with optional dependency warnings (expected) 
-- CLI: ✅ Builds and creates executable
-
-The CLI executable starts but has runtime errors related to configuration, which is expected since no auth configuration is provided in the test environment.
