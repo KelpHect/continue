@@ -6,8 +6,6 @@ import { checkToolPermission } from "../permissions/permissionChecker.js";
 import { toolPermissionManager } from "../permissions/permissionManager.js";
 import { ToolCallRequest } from "../permissions/types.js";
 import { services } from "../services/index.js";
-import { telemetryService } from "../telemetry/telemetryService.js";
-import { calculateTokenCost } from "../telemetry/utils.js";
 import {
   executeToolCall,
   getAllBuiltinTools,
@@ -154,14 +152,7 @@ export function trackFirstTokenTime(
     chunk.choices?.[0]?.delta &&
     (chunk.choices[0].delta.content || chunk.choices[0].delta.tool_calls)
   ) {
-    const tokenTime = Date.now();
-    telemetryService.recordResponseTime(
-      tokenTime - requestStartTime,
-      model.model,
-      "time_to_first_token",
-      (tools?.length || 0) > 0,
-    );
-    return tokenTime;
+    const tokenTime = Date.now();    return tokenTime;
   }
   return firstTokenTime;
 }
@@ -246,49 +237,6 @@ export function processToolCallDelta(
   }
 }
 
-// Helper function to record telemetry
-export function recordStreamTelemetry(options: {
-  requestStartTime: number;
-  responseEndTime: number;
-  inputTokens: number;
-  outputTokens: number;
-  model: any;
-  tools?: any[];
-}): number {
-  const {
-    requestStartTime,
-    responseEndTime,
-    inputTokens,
-    outputTokens,
-    model,
-    tools,
-  } = options;
-  const totalDuration = responseEndTime - requestStartTime;
-  const cost = calculateTokenCost(inputTokens, outputTokens, model.model);
-
-  telemetryService.recordTokenUsage(inputTokens, "input", model.model);
-  telemetryService.recordTokenUsage(outputTokens, "output", model.model);
-  telemetryService.recordCost(cost, model.model);
-
-  telemetryService.recordResponseTime(
-    totalDuration,
-    model.model,
-    "total_response_time",
-    (tools?.length || 0) > 0,
-  );
-
-  telemetryService.logApiRequest({
-    model: model.model,
-    durationMs: totalDuration,
-    success: true,
-    inputTokens,
-    outputTokens,
-    costUsd: cost,
-  });
-
-  return cost;
-}
-
 /**
  * Processes tool calls by validating and preprocessing them
  * @param toolCalls - The raw tool calls from the LLM
@@ -347,13 +295,6 @@ export async function preprocessStreamedToolCalls(
       });
 
       const duration = Date.now() - startTime;
-      telemetryService.logToolResult({
-        toolName: toolCall.name,
-        success: false,
-        durationMs: duration,
-        error: errorMessage,
-      });
-
       // Add error to chat history
       errorChatEntries.push({
         role: "tool",

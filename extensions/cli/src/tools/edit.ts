@@ -2,12 +2,6 @@ import * as fs from "fs";
 
 import { throwIfFileIsSecurityConcern } from "core/indexing/ignore.js";
 
-import { telemetryService } from "../telemetry/telemetryService.js";
-import {
-  calculateLinesOfCodeDiff,
-  getLanguageFromFilePath,
-} from "../telemetry/utils.js";
-
 import { readFilesSet, readFileTool } from "./readFile.js";
 import { Tool } from "./types.js";
 import { generateDiff } from "./writeFile.js";
@@ -151,24 +145,6 @@ WARNINGS:
   }) => {
     try {
       fs.writeFileSync(args.resolvedPath, args.newContent, "utf-8");
-
-      // Get lines for telemetry
-      const { added, removed } = calculateLinesOfCodeDiff(
-        args.oldContent,
-        args.newContent,
-      );
-      const language = getLanguageFromFilePath(args.resolvedPath);
-
-      if (added > 0) {
-        telemetryService.recordLinesOfCodeModified("added", added, language);
-      }
-      if (removed > 0) {
-        telemetryService.recordLinesOfCodeModified(
-          "removed",
-          removed,
-          language,
-        );
-      }
 
       // Generate diff for result display
       const diff = generateDiff(

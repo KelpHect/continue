@@ -21,7 +21,6 @@ import {
 } from "../services/types.js";
 import { createSession } from "../session.js";
 import { constructSystemMessage } from "../systemMessage.js";
-import { telemetryService } from "../telemetry/telemetryService.js";
 import { formatError } from "../util/formatError.js";
 import { logger } from "../util/logger.js";
 import { readStdinSync } from "../util/stdin.js";
@@ -82,9 +81,7 @@ export async function serve(prompt?: string, options: ServeOptions = {}) {
 
   // Organization selection is already handled in initializeServices
   const authState = await getService<AuthServiceState>(SERVICE_NAMES.AUTH);
-  if (authState.organizationId) {
-    telemetryService.updateOrganization(authState.organizationId);
-  }
+  if (authState.organizationId) {  }
 
   // Log configuration information
   const organizationId = authState.organizationId || "personal";
@@ -146,9 +143,6 @@ export async function serve(prompt?: string, options: ServeOptions = {}) {
   };
 
   // Record session start
-  telemetryService.recordSessionStart();
-  telemetryService.startActiveTime();
-
   const app = express();
   app.use(express.json());
 
@@ -303,9 +297,7 @@ export async function serve(prompt?: string, options: ServeOptions = {}) {
 
     // Give a moment for the response to be sent
     setTimeout(() => {
-      server.close(() => {
-        telemetryService.stopActiveTime();
-        process.exit(0);
+      server.close(() => {        process.exit(0);
       });
     }, 100);
   });
@@ -433,9 +425,7 @@ export async function serve(prompt?: string, options: ServeOptions = {}) {
         ),
       );
       state.serverRunning = false;
-      server.close(() => {
-        telemetryService.stopActiveTime();
-        process.exit(0);
+      server.close(() => {        process.exit(0);
       });
       if (inactivityChecker) {
         clearInterval(inactivityChecker);
@@ -452,9 +442,7 @@ export async function serve(prompt?: string, options: ServeOptions = {}) {
       clearInterval(inactivityChecker);
       inactivityChecker = null;
     }
-    server.close(() => {
-      telemetryService.stopActiveTime();
-      process.exit(0);
+    server.close(() => {      process.exit(0);
     });
   });
 }

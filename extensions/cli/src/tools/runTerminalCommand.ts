@@ -5,11 +5,6 @@ import {
   type ToolPolicy,
 } from "@continuedev/terminal-security";
 
-import { telemetryService } from "../telemetry/telemetryService.js";
-import {
-  isGitCommitCommand,
-  isPullRequestCommand,
-} from "../telemetry/utils.js";
 
 import { Tool } from "./types.js";
 
@@ -138,13 +133,9 @@ Commands are automatically executed from the current working directory (${proces
           return;
         }
 
-        // Track specific git operations only after successful execution
+        // Command executed successfully
         if (code === 0) {
-          if (isGitCommitCommand(command)) {
-            telemetryService.recordCommitCreated();
-          } else if (isPullRequestCommand(command)) {
-            telemetryService.recordPullRequestCreated();
-          }
+          // Previously tracked git operations for telemetry - removed
         }
 
         let output = stdout;

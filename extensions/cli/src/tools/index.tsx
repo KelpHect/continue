@@ -6,7 +6,6 @@ import {
   serviceContainer,
 } from "../services/index.js";
 import type { ToolPermissionServiceState } from "../services/ToolPermissionService.js";
-import { telemetryService } from "../telemetry/telemetryService.js";
 import { logger } from "../util/logger.js";
 
 import { editTool } from "./edit.js";
@@ -160,13 +159,6 @@ export async function executeToolCall(
     );
     const duration = Date.now() - startTime;
 
-    telemetryService.logToolResult({
-      toolName: toolCall.name,
-      success: true,
-      durationMs: duration,
-      toolParameters: JSON.stringify(toolCall.arguments),
-    });
-
     logger.debug("Tool execution completed", {
       toolName: toolCall.name,
       resultLength: result?.length || 0,
@@ -176,14 +168,6 @@ export async function executeToolCall(
   } catch (error) {
     const duration = Date.now() - startTime;
     const errorMessage = error instanceof Error ? error.message : String(error);
-
-    telemetryService.logToolResult({
-      toolName: toolCall.name,
-      success: false,
-      durationMs: duration,
-      error: errorMessage,
-      toolParameters: JSON.stringify(toolCall.arguments),
-    });
 
     return `Error executing tool "${toolCall.name}": ${errorMessage}`;
   }

@@ -1,10 +1,5 @@
 import * as fs from "fs";
 
-import { telemetryService } from "../../telemetry/telemetryService.js";
-import {
-  calculateLinesOfCodeDiff,
-  getLanguageFromFilePath,
-} from "../../telemetry/utils.js";
 import { Tool } from "../types.js";
 import { generateDiff } from "../writeFile.js";
 
@@ -157,27 +152,7 @@ Each string in the diffs array can contain multiple SEARCH/REPLACE blocks, and a
   },
   run: async (args) => {
     try {
-      fs.writeFileSync(args.filepath, args.newContent, "utf-8");
-
-      // Get lines for telemetry
-      const { added, removed } = calculateLinesOfCodeDiff(
-        args.oldContent,
-        args.newContent,
-      );
-      const language = getLanguageFromFilePath(args.filepath);
-
-      if (added > 0) {
-        telemetryService.recordLinesOfCodeModified("added", added, language);
-      }
-      if (removed > 0) {
-        telemetryService.recordLinesOfCodeModified(
-          "removed",
-          removed,
-          language,
-        );
-      }
-
-      // Record file operation
+      fs.writeFileSync(args.filepath, args.newContent, "utf-8");// Record file operation
       return `Successfully edited ${args.filepath}`;
     } catch (error) {
       throw new Error(

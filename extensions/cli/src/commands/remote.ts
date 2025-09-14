@@ -2,7 +2,6 @@ import chalk from "chalk";
 
 import { getAccessToken, loadAuthConfig } from "../auth/workos.js";
 import { env } from "../env.js";
-import { telemetryService } from "../telemetry/telemetryService.js";
 import { startRemoteTUIChat } from "../ui/index.js";
 import { getRepoUrl } from "../util/git.js";
 import { logger } from "../util/logger.js";
@@ -55,15 +54,10 @@ export async function remote(
     );
 
     // Record session start
-    telemetryService.recordSessionStart();
-    telemetryService.startActiveTime();
-
     try {
       // Start the TUI in remote mode
       await startRemoteTUIChat(options.url, actualPrompt);
-    } finally {
-      telemetryService.stopActiveTime();
-    }
+    } finally {    }
     return;
   }
 
@@ -139,15 +133,10 @@ export async function remote(
       );
 
       // Record session start
-      telemetryService.recordSessionStart();
-      telemetryService.startActiveTime();
-
       try {
         // Start the TUI in remote mode (prompt is optional)
         await startRemoteTUIChat(remoteUrl, actualPrompt);
-      } finally {
-        telemetryService.stopActiveTime();
-      }
+      } finally {      }
     } else {
       throw new Error(
         "No URL or port returned from remote environment creation",
