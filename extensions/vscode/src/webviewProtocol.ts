@@ -129,13 +129,13 @@ export class VsCodeWebviewProtocol
               .showInformationMessage(message, "Add API Key", "Use Local Model")
               .then((selection) => {
                 if (selection === "Add API Key") {
-                  this.request("setupApiKey", undefined);
+                  void this.request("setupApiKey", undefined);
                 } else if (selection === "Use Local Model") {
-                  this.request("setupLocalConfig", undefined);
+                  void this.request("setupLocalConfig", undefined);
                 }
               });
           } else {
-            Telemetry.capture(
+            void Telemetry.capture(
               "webview_protocol_error",
               {
                 messageType: msg.messageType,
