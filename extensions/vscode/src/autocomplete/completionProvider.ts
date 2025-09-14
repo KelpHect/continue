@@ -355,7 +355,7 @@ export class ContinueCompletionProvider
 
           // Fill in the spot after dequeuing.
           if (!this.usingFullFileDiff) {
-            this.prefetchQueue.process({
+            void this.prefetchQueue.process({
               ...ctx,
               recentlyVisitedRanges: this.recentlyVisitedRanges.getSnippets(),
               recentlyEditedRanges:
@@ -376,7 +376,7 @@ export class ContinueCompletionProvider
 
           // Fill in the spot after dequeuing.
           if (!this.usingFullFileDiff) {
-            this.prefetchQueue.process({
+            void this.prefetchQueue.process({
               ...ctx,
               recentlyVisitedRanges: this.recentlyVisitedRanges.getSnippets(),
               recentlyEditedRanges:
@@ -416,7 +416,7 @@ export class ContinueCompletionProvider
           console.log(
             "No suitable jump location found after trying all positions",
           );
-          this.nextEditProvider.deleteChain();
+          void this.nextEditProvider.deleteChain();
           return undefined;
         }
       } else {
@@ -442,7 +442,7 @@ export class ContinueCompletionProvider
           // Start prefetching next edits if not using full file diff.
           // NOTE: this is better off not awaited. fire and forget.
           if (!this.usingFullFileDiff) {
-            this.prefetchQueue.process(ctx);
+            void this.prefetchQueue.process(ctx);
           }
 
           // If initial outcome is null, suggest a jump instead.
@@ -618,7 +618,7 @@ export class ContinueCompletionProvider
       if (isFim) {
         if (!fimText) {
           console.log("deleteChain from completionProvider.ts: !fimText");
-          this.nextEditProvider.deleteChain();
+          void this.nextEditProvider.deleteChain();
           return undefined;
         }
 
@@ -657,7 +657,7 @@ export class ContinueCompletionProvider
         console.log(
           "deleteChain from completionProvider.ts: diffLines.length === 0",
         );
-        NextEditProvider.getInstance().deleteChain();
+        void NextEditProvider.getInstance().deleteChain();
       }
 
       if (NextEditWindowManager.isInstantiated()) {

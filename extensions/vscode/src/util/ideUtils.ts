@@ -79,7 +79,7 @@ export class VsCodeIdeUtils {
   }
 
   showSuggestion(uri: vscode.Uri, range: Range, suggestion: string) {
-    showSuggestionInEditor(
+    void showSuggestionInEditor(
       uri,
       new vscode.Range(
         range.start.line,
@@ -264,9 +264,9 @@ export class VsCodeIdeUtils {
 
   acceptRejectSuggestion(accept: boolean, key: SuggestionRanges) {
     if (accept) {
-      acceptSuggestionCommand(key);
+      void acceptSuggestionCommand(key);
     } else {
-      rejectSuggestionCommand(key);
+      void rejectSuggestionCommand(key);
     }
   }
 

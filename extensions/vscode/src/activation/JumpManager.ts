@@ -380,7 +380,7 @@ export class JumpManager {
           console.log(
             "deleteChain from JumpManager.ts: rejectJump and decoration visible",
           );
-          NextEditProvider.getInstance().deleteChain();
+          void NextEditProvider.getInstance().deleteChain();
           await this.clearJumpDecoration();
         }
       },

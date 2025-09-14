@@ -89,7 +89,7 @@ export class VsCodeMessenger {
   ) {
     /** WEBVIEW ONLY LISTENERS **/
     this.onWebview("showFile", (msg) => {
-      this.ide.openFile(msg.data.filepath);
+      void this.ide.openFile(msg.data.filepath);
     });
 
     this.onWebview("vscode/openMoveRightMarkdown", (msg) => {
@@ -352,7 +352,7 @@ export class VsCodeMessenger {
       return ide.showLines(filepath, startLine, endLine);
     });
     this.onWebviewOrCore("showToast", (msg) => {
-      this.ide.showToast(...msg.data);
+      void this.ide.showToast(...msg.data);
     });
     this.onWebviewOrCore("getControlPlaneSessionInfo", async (msg) => {
       return getControlPlaneSessionInfo(

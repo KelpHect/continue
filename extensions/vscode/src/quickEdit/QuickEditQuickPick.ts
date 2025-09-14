@@ -150,7 +150,7 @@ export class QuickEdit {
       this.initialPrompt = params.initialPrompt;
     }
 
-    this.range = !!params?.range
+    this.range = params?.range
       ? params.range
       : this.editorWhenOpened.selection;
 
@@ -161,7 +161,7 @@ export class QuickEdit {
       return;
     }
 
-    Telemetry.capture("quickEditSelection", {
+    void Telemetry.capture("quickEditSelection", {
       selection: {
         label: selectedLabel,
         value: selectedValue,
@@ -211,7 +211,7 @@ export class QuickEdit {
             await vscode.commands.executeCommand("continue.rejectDiff", path);
             const newPrompt = quickPick.value;
             appendToHistory(newPrompt, this.context);
-            this.handleUserPrompt(newPrompt, path);
+            void this.handleUserPrompt(newPrompt, path);
           }
           break;
         default:
@@ -355,7 +355,7 @@ export class QuickEdit {
     const model = await this.getCurModel();
 
     if (!model) {
-      this.ide.showToast("error", "Please configure a model to use Quick Edit");
+      void this.ide.showToast("error", "Please configure a model to use Quick Edit");
       return { label: undefined, value: undefined };
     }
 
@@ -415,7 +415,9 @@ export class QuickEdit {
   }) => {
     const { uri } = this.editorWhenOpened.document;
 
-    if (value !== "") {
+    if (value === "") {
+      quickPick.items = initialItems;
+    } else {
       switch (true) {
         case value.endsWith(FILE_SEARCH_CHAR):
           quickPick.items = [
@@ -455,8 +457,6 @@ export class QuickEdit {
           quickPick.items = [SUBMIT_ITEM];
           break;
       }
-    } else {
-      quickPick.items = initialItems;
     }
   };
 
@@ -528,7 +528,7 @@ export class QuickEdit {
         this.contextProviderStr = contextProviderVal ?? "";
 
         // Recurse back to let the user write their prompt
-        this.initiateNewQuickPick(editor, params);
+        void this.initiateNewQuickPick(editor, params);
 
         break;
 
