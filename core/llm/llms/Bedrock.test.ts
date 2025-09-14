@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import {
   ChatMessage,
   Chunk,
@@ -14,6 +15,16 @@ vi.mock("@aws-sdk/client-bedrock-runtime", () => ({
   })),
   ConverseStreamCommand: vi.fn(),
   InvokeModelCommand: vi.fn(),
+  ConversationRole: {
+    USER: "user",
+    ASSISTANT: "assistant",
+  },
+  ImageFormat: {
+    JPEG: "jpeg",
+    PNG: "png",
+    GIF: "gif",
+    WEBP: "webp",
+  },
 }));
 
 // Mock credential provider

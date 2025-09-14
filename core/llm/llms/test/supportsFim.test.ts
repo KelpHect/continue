@@ -8,9 +8,8 @@ import ContinueProxy from "../stubs/ContinueProxy.js";
 import Vllm from "../Vllm.js";
 
 // Mock the parseProxyModelName function
-const mockParseProxyModelName = vi.fn();
 vi.mock("@continuedev/config-yaml", () => ({
-  parseProxyModelName: mockParseProxyModelName,
+  parseProxyModelName: vi.fn(),
   decodeSecretLocation: vi.fn(),
   SecretType: { NotFound: "not-found" },
 }));

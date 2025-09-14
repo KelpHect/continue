@@ -1,11 +1,14 @@
+import { vi } from "vitest";
 import { getSecureID } from "./getSecureID";
 
 // Mock the crypto.randomUUID function
 const mockRandomUUID = vi.fn();
-global.crypto = {
+
+// Use vi.stubGlobal to mock crypto.randomUUID
+vi.stubGlobal('crypto', {
   ...global.crypto,
   randomUUID: mockRandomUUID,
-};
+});
 
 describe("getSecureID", () => {
   beforeEach(() => {
