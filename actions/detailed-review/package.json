@@ -2,18 +2,13 @@
   "name": "@continue/pr-review-scripts",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "Scripts for Continue PR Review Action",
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "devDependencies": {
-    "jest": "^29.7.0"
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "testMatch": [
-      "**/*.test.js"
-    ]
+    "vitest": "^2.1.9"
   }
 }
