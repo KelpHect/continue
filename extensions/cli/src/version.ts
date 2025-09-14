@@ -2,7 +2,7 @@ import { readFileSync } from "fs";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 
-import node_machine_id from "node-machine-id";
+import { machineIdSync } from "node-machine-id";
 
 import { isAuthenticatedConfig, loadAuthConfig } from "./auth/workos.js";
 import { logger } from "./util/logger.js";
@@ -28,7 +28,7 @@ function getEventUserId(): string {
   }
 
   // Fall back to unique machine id if not signed in
-  return node_machine_id.machineIdSync();
+  return machineIdSync();
 }
 
 // Singleton to cache the latest version result

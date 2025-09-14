@@ -1,7 +1,7 @@
 import dns from "dns/promises";
 import os from "node:os";
 
-import node_machine_id from "node-machine-id";
+import { machineIdSync } from "node-machine-id";
 import type { PostHog as PostHogType } from "posthog-node";
 
 import { isAuthenticatedConfig, loadAuthConfig } from "../auth/workos.js";
@@ -77,7 +77,7 @@ export class PosthogService {
     }
 
     // Fall back to unique machine id if not signed in
-    return node_machine_id.machineIdSync();
+    return machineIdSync();
   }
 
   async capture(event: string, properties: { [key: string]: any }) {
