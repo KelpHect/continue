@@ -78,11 +78,11 @@ class TestCodebaseIndexer extends CodebaseIndexer {
 
 // Create a mock messenger type that doesn't require actual protocol imports
 type MockMessengerType = {
-  send: vi.Mock;
-  request: vi.Mock;
-  invoke: vi.Mock;
-  on: vi.Mock;
-  onError: vi.Mock;
+  send: MockedFunction<any>;
+  request: MockedFunction<any>;
+  invoke: MockedFunction<any>;
+  on: MockedFunction<any>;
+  onError: MockedFunction<any>;
 };
 
 // These are more like integration tests, whereas we should separately test
