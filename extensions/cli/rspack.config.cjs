@@ -133,7 +133,7 @@ const rspackConfig = {
     },
     {
       apply(compiler) {
-        compiler.hooks.afterEmit.tap("OnEndPlugin", (compilation, callback) => {
+        compiler.hooks.afterEmit.tap("OnEndPlugin", (compilation) => {
           if (compilation.errors.length > 0) {
             console.error("Build failed with errors:", compilation.errors);
             const errorMessages = compilation.errors.map(error => 
