@@ -633,8 +633,12 @@
     ]
   },
   "scripts": {
+    "rspack-base": "rspack build -c rspack.config.js",
+    "vscode:prepublish": "npm run rspack-base",
+    "build": "NODE_ENV=development npm run rspack-base",
+    "build-watch": "NODE_ENV=development npm run rspack-base -- --watch",
+    "build-notify": "NODE_ENV=development npm run rspack-base",
     "esbuild-base": "node scripts/esbuild.js",
-    "vscode:prepublish": "npm run esbuild-base -- --minify",
     "esbuild": "npm run esbuild-base -- --sourcemap",
     "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
     "esbuild-notify": "npm run esbuild-base -- --sourcemap --notify",
@@ -679,6 +683,8 @@
     "@biomejs/biome": "1.6.4",
     "@nestjs/common": "^11.0.16",
     "@openapitools/openapi-generator-cli": "^2.23.1",
+    "@rspack/cli": "^1.5.3",
+    "@rspack/core": "^1.5.3",
     "@types/chai": "^5.0.1",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",

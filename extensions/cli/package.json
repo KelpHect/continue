@@ -17,7 +17,8 @@
     "build:tsc": "tsc -p tsconfig.build.json",
     "build:local-deps": "cd ../../packages/config-types && npm i && npm run build && cd ../fetch && npm i && npm run build && cd ../llm-info && npm i && npm run build && cd ../terminal-security && npm i && npm run build && cd ../config-yaml && npm i && npm run build && cd ../openai-adapters && npm i && npm run build && cd ../../core && npm i && npm run build && cd ../extensions/cli && npm i",
     "build:validate": "node validate-aliases.mjs",
-    "build:bundle": "node build.mjs",
+    "build:bundle": "rspack build -c rspack.config.cjs",
+    "build:bundle:esbuild": "node build.mjs",
     "build": "npm run build:validate && npm run build:bundle",
     "start": "node dist/cn.js",
     "dev": "tsx src/index.ts",
@@ -44,7 +45,10 @@
   },
   "homepage": "https://continue.dev",
   "dependencies": {
-    "@sentry/profiling-node": "^9.46.0"
+    "@mozilla/readability": "^0.6.0",
+    "@sentry/profiling-node": "^9.46.0",
+    "comment-json": "^4.2.5",
+    "node-html-markdown": "^1.3.0"
   },
   "devDependencies": {
     "@continuedev/config-yaml": "file:../../packages/config-yaml",
@@ -60,6 +64,8 @@
     "@opentelemetry/resources": "^2.1.0",
     "@opentelemetry/sdk-node": "^0.205.0",
     "@opentelemetry/semantic-conventions": "^1.37.0",
+    "@rspack/cli": "^1.5.3",
+    "@rspack/core": "^1.5.3",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/github": "^11.0.5",
@@ -85,20 +91,20 @@
     "@vitest/ui": "^3.2.4",
     "@workos-inc/node": "^7.69.2",
     "chalk": "^5.6.2",
+    "clipboardy": "^4.0.0",
     "commander": "^14.0.0",
     "conventional-changelog-conventionalcommits": "^9.1.0",
     "core": "file:../../core",
     "cross-env": "^7.0.3",
     "date-fns": "^4.1.0",
     "diff": "^7.0.0",
-    "dotenv": "^16.5.0",
+    "dotenv": "^16.6.1",
     "esbuild": "^0.25.9",
     "eslint": "^9.32.0",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-unused-imports": "^4.1.4",
     "execa": "^9.6.0",
-    "clipboardy": "^4.0.0",
     "express": "^5.1.0",
     "glob": "^11.0.3",
     "gpt-tokenizer": "^3.0.1",
@@ -131,7 +137,7 @@
     "uuid": "^9.0.1",
     "vitest": "^3.2.4",
     "winston": "^3.17.0",
-    "yaml": "^2.8.0"
+    "yaml": "^2.8.1"
   },
   "engine": {
     "node": ">=18"
