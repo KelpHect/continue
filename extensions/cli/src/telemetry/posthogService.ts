@@ -1,10 +1,24 @@
 import dns from "dns/promises";
 import os from "node:os";
 
-import { machineIdSync } from "node-machine-id";
 import type { PostHog as PostHogType } from "posthog-node";
 
-import { isAuthenticatedConfig, loadAuthConfig } from "../auth/workos.js";
+// Lazy imports to avoid initialization issues
+let machineIdSync: (() => string) | undefined;
+let isAuthenticatedConfig: ((config: any) => boolean) | undefined;
+let loadAuthConfig: (() => any) | undefined;
+
+async function lazyImports() {
+  if (!machineIdSync || !isAuthenticatedConfig || !loadAuthConfig) {
+    const { machineIdSync: _machineIdSync } = await import("node-machine-id");
+    const { isAuthenticatedConfig: _isAuthenticatedConfig, loadAuthConfig: _loadAuthConfig } = await import("../auth/workos.js");
+    machineIdSync = _machineIdSync;
+    isAuthenticatedConfig = _isAuthenticatedConfig;
+    loadAuthConfig = _loadAuthConfig;
+  }
+  return { machineIdSync, isAuthenticatedConfig, loadAuthConfig };
+}
+
 import { isHeadlessMode } from "../util/cli.js";
 import { isGitHubActions } from "../util/git.js";
 import { logger } from "../util/logger.js";
@@ -12,11 +26,11 @@ import { getVersion } from "../version.js";
 
 export class PosthogService {
   private os: string | undefined;
-  private uniqueId: string;
+  private uniqueId: string | undefined;
 
   constructor() {
     this.os = os.platform();
-    this.uniqueId = this.getEventUserId();
+    // Defer uniqueId initialization to avoid temporal dead zone issues
   }
 
   private _hasInternetConnection: boolean | undefined = undefined;
@@ -69,15 +83,22 @@ export class PosthogService {
    * - Continue user id if signed in
    * - Unique machine id if not signed in
    */
-  private getEventUserId(): string {
+  private async getEventUserId(): Promise<string> {
+    if (this.uniqueId) {
+      return this.uniqueId;
+    }
+
+    const { machineIdSync, isAuthenticatedConfig, loadAuthConfig } = await lazyImports();
     const authConfig = loadAuthConfig();
 
     if (isAuthenticatedConfig(authConfig)) {
-      return authConfig.userId;
+      this.uniqueId = authConfig.userId;
+    } else {
+      // Fall back to unique machine id if not signed in
+      this.uniqueId = machineIdSync();
     }
 
-    // Fall back to unique machine id if not signed in
-    return machineIdSync();
+    return this.uniqueId!;
   }
 
   async capture(event: string, properties: { [key: string]: any }) {
@@ -87,6 +108,7 @@ export class PosthogService {
         return;
       }
 
+      const distinctId = await this.getEventUserId();
       const augmentedProperties = {
         ...properties,
         os: this.os,
@@ -97,7 +119,7 @@ export class PosthogService {
         isGitHubCI: isGitHubActions(),
       };
       const payload = {
-        distinctId: this.uniqueId,
+        distinctId,
         event,
         properties: augmentedProperties,
         sendFeatureFlags: true,

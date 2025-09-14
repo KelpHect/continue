@@ -2,9 +2,22 @@ import { readFileSync } from "fs";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 
-import { machineIdSync } from "node-machine-id";
+// Lazy imports to avoid initialization issues
+let machineIdSync: (() => string) | undefined;
+let isAuthenticatedConfig: ((config: any) => boolean) | undefined;
+let loadAuthConfig: (() => any) | undefined;
 
-import { isAuthenticatedConfig, loadAuthConfig } from "./auth/workos.js";
+async function lazyImports() {
+  if (!machineIdSync || !isAuthenticatedConfig || !loadAuthConfig) {
+    const { machineIdSync: _machineIdSync } = await import("node-machine-id");
+    const { isAuthenticatedConfig: _isAuthenticatedConfig, loadAuthConfig: _loadAuthConfig } = await import("./auth/workos.js");
+    machineIdSync = _machineIdSync;
+    isAuthenticatedConfig = _isAuthenticatedConfig;
+    loadAuthConfig = _loadAuthConfig;
+  }
+  return { machineIdSync, isAuthenticatedConfig, loadAuthConfig };
+}
+
 import { logger } from "./util/logger.js";
 
 export function getVersion(): string {
@@ -20,7 +33,9 @@ export function getVersion(): string {
   }
 }
 
-function getEventUserId(): string {
+async function getEventUserId(): Promise<string> {
+  const { machineIdSync, isAuthenticatedConfig, loadAuthConfig } = await lazyImports();
+  
   const authConfig = loadAuthConfig();
 
   if (isAuthenticatedConfig(authConfig)) {
@@ -45,7 +60,7 @@ export async function getLatestVersion(
   // Create and cache the promise
   latestVersionCache = (async () => {
     try {
-      const id = getEventUserId();
+      const id = await getEventUserId();
       const response = await fetch(
         `https://api.continue.dev/cn/info?id=${encodeURIComponent(id)}`,
         { signal },
@@ -70,17 +85,20 @@ export async function getLatestVersion(
   return latestVersionCache;
 }
 
-getLatestVersion()
-  .then((version) => {
-    if (version) {
-      logger?.info(`Latest version: ${version}`);
-    }
-  })
-  .catch((error) => {
-    logger?.debug(
-      `Warning: Could not fetch latest version from api.continue.dev: ${error}`,
-    );
-  });
+// Defer the version fetch to avoid module initialization issues
+setTimeout(() => {
+  getLatestVersion()
+    .then((version) => {
+      if (version) {
+        logger?.info(`Latest version: ${version}`);
+      }
+    })
+    .catch((error) => {
+      logger?.debug(
+        `Warning: Could not fetch latest version from api.continue.dev: ${error}`,
+      );
+    });
+}, 0);
 
 export function compareVersions(
   current: string,
