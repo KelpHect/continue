@@ -114,7 +114,7 @@ describe("DocsCrawler", () => {
     beforeAll(async () => {
       docsCrawler = new DocsCrawler(mockIde, config, 5, 5, true);
       await chromiumInstaller.install();
-      shouldUseChromiumSpy = jest
+      shouldUseChromiumSpy = vi
         .spyOn(docsCrawler as any, "shouldUseChromium")
         .mockReturnValue(true);
     }, TIMEOUT_MS);

@@ -3,11 +3,11 @@ import { PrecalculatedLruCache } from "./LruCache";
 describe("PrecalculatedLruCache", () => {
   const N = 2;
 
-  let calculateValue: jest.MockedFunction<(key: string) => Promise<number>>;
+  let calculateValue: MockedFunction<(key: string) => Promise<number>>;
   let cache: PrecalculatedLruCache<number>;
 
   beforeEach(() => {
-    calculateValue = jest.fn(async (key: string) => {
+    calculateValue = vi.fn(async (key: string) => {
       return parseInt(key, 10) * 2;
     });
 

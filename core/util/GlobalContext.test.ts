@@ -61,7 +61,7 @@ describe("GlobalContext", () => {
     // Write invalid JSON to the file
     fs.writeFileSync(globalContextFilePath, "{ invalid json }");
 
-    const consoleWarnMock = jest
+    const consoleWarnMock = vi
       .spyOn(console, "warn")
       .mockImplementation(() => {});
 
@@ -82,7 +82,7 @@ describe("GlobalContext", () => {
     fs.writeFileSync(globalContextFilePath, "{ invalid json }");
     expect(fs.existsSync(globalContextFilePath)).toBe(true);
 
-    const consoleWarnMock = jest
+    const consoleWarnMock = vi
       .spyOn(console, "warn")
       .mockImplementation(() => {});
 
@@ -106,7 +106,7 @@ describe("GlobalContext", () => {
     // Write invalid JSON to the file
     fs.writeFileSync(globalContextFilePath, "{ invalid json }");
 
-    const consoleWarnMock = jest
+    const consoleWarnMock = vi
       .spyOn(console, "warn")
       .mockImplementation(() => {});
 
@@ -132,7 +132,7 @@ describe("GlobalContext", () => {
     fs.writeFileSync(globalContextFilePath, "{ invalid json }");
     expect(fs.existsSync(globalContextFilePath)).toBe(true);
 
-    const consoleWarnMock = jest
+    const consoleWarnMock = vi
       .spyOn(console, "warn")
       .mockImplementation(() => {});
 
@@ -185,7 +185,7 @@ describe("GlobalContext", () => {
 }`;
       fs.writeFileSync(globalContextFilePath, corruptedContent);
 
-      const consoleWarnMock = jest
+      const consoleWarnMock = vi
         .spyOn(console, "warn")
         .mockImplementation(() => {});
 
@@ -215,7 +215,7 @@ describe("GlobalContext", () => {
 }`;
       fs.writeFileSync(globalContextFilePath, corruptedContent);
 
-      const consoleWarnMock = jest
+      const consoleWarnMock = vi
         .spyOn(console, "warn")
         .mockImplementation(() => {});
 
@@ -244,7 +244,7 @@ describe("GlobalContext", () => {
 }`;
       fs.writeFileSync(globalContextFilePath, corruptedContent);
 
-      const consoleWarnMock = jest
+      const consoleWarnMock = vi
         .spyOn(console, "warn")
         .mockImplementation(() => {});
 
@@ -265,7 +265,7 @@ describe("GlobalContext", () => {
 }`;
       fs.writeFileSync(globalContextFilePath, corruptedContent);
 
-      const consoleWarnMock = jest
+      const consoleWarnMock = vi
         .spyOn(console, "warn")
         .mockImplementation(() => {});
 
@@ -284,7 +284,7 @@ describe("GlobalContext", () => {
         "complete garbage not json at all",
       );
 
-      const consoleWarnMock = jest
+      const consoleWarnMock = vi
         .spyOn(console, "warn")
         .mockImplementation(() => {});
 
@@ -306,7 +306,7 @@ describe("GlobalContext", () => {
 }`;
       fs.writeFileSync(globalContextFilePath, corruptedContent);
 
-      const consoleWarnMock = jest
+      const consoleWarnMock = vi
         .spyOn(console, "warn")
         .mockImplementation(() => {});
 

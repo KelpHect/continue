@@ -1,13 +1,13 @@
 import { parseMarkdownRule } from "@continuedev/config-yaml";
-import { jest } from "@jest/globals";
+import { vi } from "vitest";
 import { createRuleBlockImpl } from "./createRuleBlock";
 
 const mockIde = {
-  getWorkspaceDirs: jest.fn<() => Promise<string[]>>().mockResolvedValue(["/"]),
-  writeFile: jest
+  getWorkspaceDirs: vi.fn<() => Promise<string[]>>().mockResolvedValue(["/"]),
+  writeFile: vi
     .fn<(path: string, content: string) => Promise<void>>()
     .mockResolvedValue(undefined),
-  openFile: jest
+  openFile: vi
     .fn<(path: string) => Promise<void>>()
     .mockResolvedValue(undefined),
 };
@@ -17,7 +17,7 @@ const mockExtras = {
 };
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 test("createRuleBlockImpl should create a rule with glob pattern", async () => {

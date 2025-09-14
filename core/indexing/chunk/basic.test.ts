@@ -5,13 +5,13 @@ import { basicChunker } from "./basic.js";
 import { countTokensAsync } from "../../llm/countTokens";
 import { ChunkWithoutID } from "../../index";
 
-// jest.mock("../../llm/countTokens", () => ({
-//   countTokensAsync: jest.fn(),
+// vi.mock("../../llm/countTokens", () => ({
+//   countTokensAsync: vi.fn(),
 // }));
 
 describe.skip("basicChunker", () => {
   beforeEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   it("should yield no chunks for empty content", async () => {
@@ -27,7 +27,7 @@ describe.skip("basicChunker", () => {
   });
 
   it("should yield a single chunk if whole content fits within the max size", async () => {
-    (countTokensAsync as jest.Mock).mockResolvedValue(1);
+    (countTokensAsync as vi.Mock).mockResolvedValue(1);
     const contents = "line1\nline2\nline3";
     const maxChunkSize = 10;
     const expectedChunks: ChunkWithoutID[] = [
@@ -43,7 +43,7 @@ describe.skip("basicChunker", () => {
   });
 
   it("should yield multiple chunks when content exceeds the max size", async () => {
-    (countTokensAsync as jest.Mock).mockImplementation(async (line: string) => {
+    (countTokensAsync as vi.Mock).mockImplementation(async (line: string) => {
       if (line === "line3") return 5;
       return 3; // Mock returning 3 tokens per line except for "line3"
     });
@@ -65,7 +65,7 @@ describe.skip("basicChunker", () => {
   });
 
   it("should skip lines that exceed the max chunk size", async () => {
-    (countTokensAsync as jest.Mock).mockImplementation(async (line: string) => {
+    (countTokensAsync as vi.Mock).mockImplementation(async (line: string) => {
       if (line === "line3") return 15; // Making it explicitly exceed max size
       return 3;
     });

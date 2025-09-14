@@ -1,4 +1,4 @@
-import { jest } from "@jest/globals";
+import { vi } from "vitest";
 
 import {
   insertMockChunks,
@@ -28,7 +28,7 @@ describe.skip("FullTextSearchCodebaseIndex", () => {
   });
 
   it("should update the index and maintain expected database state", async () => {
-    const mockMarkComplete = jest
+    const mockMarkComplete = vi
       .fn()
       .mockImplementation(() => Promise.resolve()) as any;
 

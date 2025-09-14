@@ -1,16 +1,16 @@
 import { retryAsync, withLLMRetry, withRetry } from "./retry";
 
 // Mock console.warn to avoid noise in tests
-const consoleSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
 describe("Retry Functionality", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe("retryAsync", () => {
     it("should succeed on first attempt", async () => {
-      const mockFn = jest.fn().mockResolvedValue("success");
+      const mockFn = vi.fn().mockResolvedValue("success");
 
       const result = await retryAsync(mockFn);
 
@@ -21,7 +21,7 @@ describe("Retry Functionality", () => {
     it("should retry on retryable errors", async () => {
       const error = new Error("ECONNRESET");
       (error as any).code = "ECONNRESET";
-      const mockFn = jest
+      const mockFn = vi
         .fn()
         .mockRejectedValueOnce(error)
         .mockResolvedValue("success");
@@ -38,7 +38,7 @@ describe("Retry Functionality", () => {
     it("should not retry on non-retryable errors", async () => {
       const error = new Error("Bad Request");
       (error as any).status = 400;
-      const mockFn = jest.fn().mockRejectedValue(error);
+      const mockFn = vi.fn().mockRejectedValue(error);
 
       await expect(retryAsync(mockFn)).rejects.toThrow("Bad Request");
       expect(mockFn).toHaveBeenCalledTimes(1);
@@ -47,7 +47,7 @@ describe("Retry Functionality", () => {
     it("should respect max attempts", async () => {
       const error = new Error("ECONNRESET");
       (error as any).code = "ECONNRESET";
-      const mockFn = jest.fn().mockRejectedValue(error);
+      const mockFn = vi.fn().mockRejectedValue(error);
 
       await expect(
         retryAsync(mockFn, {
@@ -66,7 +66,7 @@ describe("Retry Functionality", () => {
       const lastError = new Error("Last error");
       (lastError as any).code = "ECONNRESET";
 
-      const mockFn = jest
+      const mockFn = vi
         .fn()
         .mockRejectedValueOnce(firstError)
         .mockRejectedValueOnce(secondError)
@@ -84,7 +84,7 @@ describe("Retry Functionality", () => {
     it("should handle HTTP 429 errors", async () => {
       const error = new Error("Too Many Requests");
       (error as any).status = 429;
-      const mockFn = jest
+      const mockFn = vi
         .fn()
         .mockRejectedValueOnce(error)
         .mockResolvedValue("success");
@@ -101,7 +101,7 @@ describe("Retry Functionality", () => {
     it("should handle HTTP 5xx errors", async () => {
       const error = new Error("Internal Server Error");
       (error as any).status = 500;
-      const mockFn = jest
+      const mockFn = vi
         .fn()
         .mockRejectedValueOnce(error)
         .mockResolvedValue("success");
@@ -123,7 +123,7 @@ describe("Retry Functionality", () => {
         httpStatusCode: 429,
         requestId: "test-request-id",
       };
-      const mockFn = jest
+      const mockFn = vi
         .fn()
         .mockRejectedValueOnce(error)
         .mockResolvedValue("success");
@@ -140,15 +140,15 @@ describe("Retry Functionality", () => {
     it("should not retry AbortError", async () => {
       const error = new Error("Aborted");
       error.name = "AbortError";
-      const mockFn = jest.fn().mockRejectedValue(error);
+      const mockFn = vi.fn().mockRejectedValue(error);
 
       await expect(retryAsync(mockFn)).rejects.toThrow("Aborted");
       expect(mockFn).toHaveBeenCalledTimes(1);
     });
 
     it("should use custom shouldRetry function", async () => {
-      const mockFn = jest.fn().mockRejectedValue(new Error("Custom Error"));
-      const customShouldRetry = jest.fn().mockReturnValue(true);
+      const mockFn = vi.fn().mockRejectedValue(new Error("Custom Error"));
+      const customShouldRetry = vi.fn().mockReturnValue(true);
 
       await expect(
         retryAsync(mockFn, {
@@ -287,7 +287,7 @@ describe("Retry Functionality", () => {
       const delays: number[] = [];
       const error = new Error("ECONNRESET");
       (error as any).code = "ECONNRESET";
-      const mockFn = jest.fn().mockRejectedValue(error);
+      const mockFn = vi.fn().mockRejectedValue(error);
 
       await expect(
         retryAsync(mockFn, {
@@ -310,7 +310,7 @@ describe("Retry Functionality", () => {
       const delays: number[] = [];
       const error = new Error("ECONNRESET");
       (error as any).code = "ECONNRESET";
-      const mockFn = jest.fn().mockRejectedValue(error);
+      const mockFn = vi.fn().mockRejectedValue(error);
 
       await expect(
         retryAsync(mockFn, {
@@ -335,7 +335,7 @@ describe("Retry Functionality", () => {
       const error = new Error("Too Many Requests");
       (error as any).status = 429;
       (error as any).headers = { "retry-after": "1" }; // 1 second for fast testing
-      const mockFn = jest
+      const mockFn = vi
         .fn()
         .mockRejectedValueOnce(error)
         .mockResolvedValue("success");
@@ -360,7 +360,7 @@ describe("Retry Functionality", () => {
       const error = new Error("Rate limited");
       (error as any).status = 429;
       (error as any).headers = { "x-ratelimit-reset": "0.5" }; // 500ms for fast testing
-      const mockFn = jest
+      const mockFn = vi
         .fn()
         .mockRejectedValueOnce(error)
         .mockResolvedValue("success");
@@ -385,7 +385,7 @@ describe("Retry Functionality", () => {
       const error = new Error("Rate limited");
       (error as any).status = 429;
       (error as any).headers = { "retry-after": futureDate.toUTCString() };
-      const mockFn = jest
+      const mockFn = vi
         .fn()
         .mockRejectedValueOnce(error)
         .mockResolvedValue("success");
@@ -410,7 +410,7 @@ describe("Retry Functionality", () => {
       const error = new Error("Server Error");
       (error as any).status = 500;
       // No headers property
-      const mockFn = jest
+      const mockFn = vi
         .fn()
         .mockRejectedValueOnce(error)
         .mockResolvedValue("success");
@@ -434,7 +434,7 @@ describe("Retry Functionality", () => {
       const error = new Error("Rate limited");
       (error as any).status = 429;
       (error as any).headers = { "retry-after": "10" }; // 10 seconds requested
-      const mockFn = jest
+      const mockFn = vi
         .fn()
         .mockRejectedValueOnce(error)
         .mockResolvedValue("success");
@@ -460,7 +460,7 @@ describe("Retry Functionality", () => {
       const error = new Error("Rate limited");
       (error as any).status = 429;
       (error as any).headers = { "Retry-After": "0.3" }; // 300ms for fast testing
-      const mockFn = jest
+      const mockFn = vi
         .fn()
         .mockRejectedValueOnce(error)
         .mockResolvedValue("success");

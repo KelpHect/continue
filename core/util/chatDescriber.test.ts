@@ -10,7 +10,7 @@ describe("ChatDescriber", () => {
   });
 
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe("describe method", () => {

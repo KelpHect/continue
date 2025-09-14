@@ -1,4 +1,4 @@
-import { jest } from "@jest/globals";
+import { vi } from "vitest";
 
 import { testIde } from "../../test/fixtures";
 import {
@@ -14,7 +14,7 @@ import { IndexResultType } from "../types";
 
 import { ChunkCodebaseIndex } from "./ChunkCodebaseIndex";
 
-jest.useFakeTimers();
+vi.useFakeTimers();
 
 describe("ChunkCodebaseIndex", () => {
   let index: ChunkCodebaseIndex;
@@ -41,7 +41,7 @@ describe("ChunkCodebaseIndex", () => {
   });
 
   it.skip("should update the index and maintain expected database state, following the same processing order of results as the update method", async () => {
-    const mockMarkComplete = jest
+    const mockMarkComplete = vi
       .fn()
       .mockImplementation(() => Promise.resolve()) as any;
 

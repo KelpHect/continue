@@ -1,7 +1,7 @@
 import { getSecureID } from "./getSecureID";
 
 // Mock the crypto.randomUUID function
-const mockRandomUUID = jest.fn();
+const mockRandomUUID = vi.fn();
 global.crypto = {
   ...global.crypto,
   randomUUID: mockRandomUUID,
