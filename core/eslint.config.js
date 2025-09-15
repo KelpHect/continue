@@ -1,23 +1,45 @@
 // @ts-check
-import baseConfig from "../eslint.config.js";
+import js from "@eslint/js";
+import typescriptParser from "@typescript-eslint/parser";
+import typescriptPlugin from "@typescript-eslint/eslint-plugin";
+import importPlugin from "eslint-plugin-import";
 
 export default [
-  ...baseConfig,
+  js.configs.recommended,
   {
     files: ["**/*.ts", "**/*.tsx"],
-    ignores: [
-      "**/vendor/**",
-      "**/__mocks__/**",
-      "**/test/files/**",
-      "**/coverage/**",
-      "**/dist/**",
-      "**/out/**",
-      "**/*.d.ts",
-    ],
     languageOptions: {
+      parser: typescriptParser,
       parserOptions: {
+        ecmaVersion: 6,
+        sourceType: "module",
         project: "./tsconfig.json",
       },
+      globals: {
+        console: "readonly",
+        process: "readonly",
+        __dirname: "readonly",
+        __filename: "readonly",
+        Buffer: "readonly",
+        global: "readonly",
+        setTimeout: "readonly",
+        clearTimeout: "readonly",
+        setInterval: "readonly",
+        clearInterval: "readonly",
+        fetch: "readonly",
+        URL: "readonly",
+        Headers: "readonly",
+        Response: "readonly",
+        Request: "readonly",
+        TextDecoder: "readonly",
+        TextEncoder: "readonly",
+        structuredClone: "readonly",
+        NodeJS: "readonly",
+      },
+    },
+    plugins: {
+      "@typescript-eslint": typescriptPlugin,
+      import: importPlugin,
     },
     rules: {
       quotes: ["off", "double", {}],
@@ -26,7 +48,6 @@ export default [
       "@typescript-eslint/no-floating-promises": "error",
       "import/order": "off",
       curly: "off",
-      "@typescript-eslint/semi": "off",
       eqeqeq: "error",
       complexity: ["error", { max: 36 }],
       "max-lines-per-function": ["error", { max: 500 }],
@@ -34,6 +55,12 @@ export default [
       "max-depth": ["error", { max: 6 }],
       "max-nested-callbacks": ["error", { max: 4 }],
       "max-params": ["error", { max: 8 }],
+      "no-negated-condition": "warn",
+      "@typescript-eslint/no-misused-promises": "error",
+      "no-throw-literal": "warn",
+      semi: "off",
+      "no-unused-vars": "warn",
+      "no-undef": "error",
     },
   },
   {
@@ -47,5 +74,16 @@ export default [
     rules: {
       "max-lines-per-function": "off",
     },
+  },
+  {
+    ignores: [
+      "**/vendor/**",
+      "**/__mocks__/**",
+      "**/test/files/**",
+      "**/coverage/**",
+      "**/dist/**",
+      "**/out/**",
+      "**/*.d.ts",
+    ],
   },
 ];
