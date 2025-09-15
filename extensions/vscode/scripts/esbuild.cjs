@@ -1,6 +1,6 @@
 const fs = require("fs");
 
-const { writeBuildTimestamp } = require("./utils");
+const { writeBuildTimestamp } = require("./utils.cjs");
 
 const esbuild = require("esbuild");
 

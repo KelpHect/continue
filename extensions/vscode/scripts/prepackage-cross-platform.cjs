@@ -12,7 +12,7 @@ const { rimrafSync } = require("rimraf");
 const {
   validateFilesPresent,
   autodetectPlatformAndArch,
-} = require("../../../scripts/util/index");
+} = require("../../../scripts/util/index.cjs");
 
 const { generateAndCopyConfigYamlSchema } = require("./generate-copy-config");
 const { npmInstall } = require("./npm-install");
@@ -29,7 +29,7 @@ const {
   downloadSqliteBinary,
   copyTokenizers,
   copyScripts,
-} = require("./utils");
+} = require("./utils.cjs");
 
 // Clear folders that will be packaged to ensure clean slate
 rimrafSync(path.join(__dirname, "..", "bin"));

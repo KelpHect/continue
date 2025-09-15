@@ -10,11 +10,11 @@ const {
   autodetectPlatformAndArch,
 } = require("../../../scripts/util/index.cjs");
 
-const { copySqlite, copyEsbuild } = require("./download-copy-sqlite-esbuild");
-const { generateAndCopyConfigYamlSchema } = require("./generate-copy-config");
-const { installAndCopyNodeModules } = require("./install-copy-nodemodule");
-const { npmInstall } = require("./npm-install");
-const { writeBuildTimestamp, continueDir } = require("./utils");
+const { copySqlite, copyEsbuild } = require("./download-copy-sqlite-esbuild.cjs");
+const { generateAndCopyConfigYamlSchema } = require("./generate-copy-config.cjs");
+const { installAndCopyNodeModules } = require("./install-copy-nodemodule.cjs");
+const { npmInstall } = require("./npm-install.cjs");
+const { writeBuildTimestamp, continueDir } = require("./utils.cjs");
 
 // Clear folders that will be packaged to ensure clean slate
 rimrafSync(path.join(__dirname, "..", "bin"));
