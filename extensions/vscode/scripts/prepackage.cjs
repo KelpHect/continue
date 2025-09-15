@@ -8,7 +8,7 @@ const {
   validateFilesPresent,
   execCmdSync,
   autodetectPlatformAndArch,
-} = require("../../../scripts/util/index");
+} = require("../../../scripts/util/index.cjs");
 
 const { copySqlite, copyEsbuild } = require("./download-copy-sqlite-esbuild");
 const { generateAndCopyConfigYamlSchema } = require("./generate-copy-config");
