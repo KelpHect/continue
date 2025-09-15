@@ -132,18 +132,7 @@ describe("BaseLLM", () => {
       expect(prefillLLM.supportsPrefill()).toBe(true);
     });
   });
-  describe("fetch", () => {
-    // TODO: Implement tests for fetch method
-  });
-  describe("*_streamFim", () => {
-    // TODO: Implement tests for *_streamFim method
-  });
-  describe("complete", () => {
-    // TODO: Implement tests for complete method
-  });
-  describe("*streamChat", () => {
-    // TODO: Implement tests for *streamChat method
-  });
+  // TODO: Add tests for fetch, *_streamFim, complete, and *streamChat methods in the future
 
   describe("default context length", () => {
     allModelProviders.map((modelProvider) => {
