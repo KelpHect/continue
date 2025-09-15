@@ -138,7 +138,7 @@ export default function MermaidDiagram({ code }: { code: string }) {
       {isLoading && (
         <div className="text-vsc-foreground text-xs">Generating diagram...</div>
       )}
-      {!!error ? (
+      {error ? (
         <div className="text-error whitespace-pre text-sm">{error}</div>
       ) : (
         <div className="relative">

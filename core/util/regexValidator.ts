@@ -25,7 +25,7 @@ export function validateAndSanitizeRegex(query: string): RegexValidationResult {
     },
     {
       // Unescaped brackets/parentheses that are NOT part of valid regex constructs
-      pattern: /(?<!\\)[\[\]()]/g, // Removed {} from here since they're valid quantifiers
+      pattern: /(?<!\\)[[\]()]/g, // Removed {} from here since they're valid quantifiers
       issue: "Unescaped brackets or parentheses",
       fix: null, // Just warn, don't auto-fix as it might be intentional
     },

@@ -108,7 +108,7 @@
       "label": "vscode-extension:continue-ui:build",
       "type": "shell",
       "command": "node",
-      "args": ["${workspaceFolder}/extensions/vscode/scripts/prepackage.js"],
+      "args": ["${workspaceFolder}/extensions/vscode/scripts/prepackage.cjs"],
       "problemMatcher": ["$tsc"],
       "presentation": {
         "group": "build-tasks",
@@ -208,7 +208,7 @@
       "label": "clean",
       "type": "shell",
       "command": "node",
-      "args": ["${workspaceFolder}/scripts/uninstall.js"],
+      "args": ["${workspaceFolder}/scripts/uninstall.cjs"],
       "problemMatcher": [],
       "presentation": {
         "group": "maintenance",
@@ -282,7 +282,7 @@
     {
       "label": "continue-packages:build",
       "type": "shell",
-      "command": "node ./scripts/build-packages.js",
+      "command": "node ./scripts/build-packages.cjs",
       "problemMatcher": [],
       "presentation": {
         "group": "build-tasks",

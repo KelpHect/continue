@@ -106,19 +106,22 @@ export class CapturedTerminal {
 
   async runCommand(command: string): Promise<string> {
     if (this.commandQueue.length === 0) {
-      return new Promise(async (resolve, reject) => {
-        this.commandQueue.push([command, resolve]);
+      return new Promise((resolve, reject) => {
+        const runAsync = async () => {
+          this.commandQueue.push([command, resolve]);
 
-        while (this.commandQueue.length > 0) {
-          const [command, resolve] = this.commandQueue.shift()!;
+          while (this.commandQueue.length > 0) {
+            const [command, resolve] = this.commandQueue.shift()!;
 
-          // Refresh the command prompt string every time in case it changes
-          await this.refreshCommandPromptString();
+            // Refresh the command prompt string every time in case it changes
+            await this.refreshCommandPromptString();
 
-          this.terminal.sendText(command);
-          const output = await this.waitForCommandToFinish();
-          resolve(output);
-        }
+            this.terminal.sendText(command);
+            const output = await this.waitForCommandToFinish();
+            resolve(output);
+          }
+        };
+        void runAsync();
       });
     } else {
       return new Promise((resolve, reject) => {

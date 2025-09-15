@@ -1,6 +1,6 @@
-/* eslint-disable max-lines-per-function */
+ 
 /* lint is not useful for test classes */
-import { vi, type MockedFunction } from "vitest";
+import { vi, type MockInstance } from "vitest";
 import { execSync } from "node:child_process";
 import fs from "node:fs";
 import path from "path";
@@ -78,11 +78,11 @@ class TestCodebaseIndexer extends CodebaseIndexer {
 
 // Create a mock messenger type that doesn't require actual protocol imports
 type MockMessengerType = {
-  send: MockedFunction<any>;
-  request: MockedFunction<any>;
-  invoke: MockedFunction<any>;
-  on: MockedFunction<any>;
-  onError: MockedFunction<any>;
+  send: MockInstance;
+  request: MockInstance;
+  invoke: MockInstance;
+  on: MockInstance;
+  onError: MockInstance;
 };
 
 // These are more like integration tests, whereas we should separately test
@@ -449,8 +449,8 @@ describe("CodebaseIndexer", () => {
       await testIndex.clearDatabase();
     });
     let testIndexer: TestCodebaseIndexer;
-    let mockRefreshCodebaseIndex: MockedFunction<any>;
-    let mockGetWorkspaceDirs: MockedFunction<any>;
+    let mockRefreshCodebaseIndex: MockInstance;
+    let mockGetWorkspaceDirs: MockInstance;
 
     beforeEach(() => {
       testIndexer = new TestCodebaseIndexer(
@@ -772,7 +772,7 @@ describe("CodebaseIndexer", () => {
 
   describe("wasAnyOneIndexAdded", () => {
     let testIndexer: TestCodebaseIndexer;
-    let mockGetIndexesToBuild: MockedFunction<any>;
+    let mockGetIndexesToBuild: MockInstance;
 
     beforeEach(() => {
       testIndexer = new TestCodebaseIndexer(

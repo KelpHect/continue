@@ -34,7 +34,7 @@ export class RecentlyEditedTracker {
           ),
           timestamp: Date.now(),
         };
-        this.insertRange(editedRange);
+        void this.insertRange(editedRange);
       });
 
       this.insertDocument(event.document.uri);

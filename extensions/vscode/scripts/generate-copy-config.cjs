@@ -6,9 +6,9 @@ const { fork } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 
-const { execCmdSync } = require("../../../scripts/util");
+const { execCmdSync } = require("../../../scripts/util/index.cjs");
 
-const { continueDir } = require("./utils");
+const { continueDir } = require("./utils.cjs");
 
 async function generateConfigYamlSchema() {
   process.chdir(path.join(continueDir, "packages", "config-yaml"));

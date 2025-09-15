@@ -56,9 +56,6 @@ export class GPTAsyncEncoder implements AsyncEncoder {
 }
 
 function workerCodeFilePath(workerFileName: string): string {
-  if (process.env.NODE_ENV === "test") {
-    // `cross-env` seems to make it so __dirname is the root of the project and not the directory containing this file
-    return path.join(__dirname, "llm", workerFileName);
-  }
+  // Worker files are always in the same directory as this file
   return path.join(__dirname, workerFileName);
 }

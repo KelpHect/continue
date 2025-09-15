@@ -3,7 +3,9 @@ import { NextEditOutcome } from "core/nextEdit/types";
 // @ts-ignore
 import svgBuilder from "svg-builder";
 import * as vscode from "vscode";
+
 import { getTheme } from "../util/getTheme";
+
 import {
   HandlerPriority,
   SelectionChangeManager,
@@ -119,7 +121,7 @@ export class JumpManager {
   public dispose() {
     // Dispose current decoration.
     this._disposables.forEach((d) => {
-      if (d) d.dispose();
+      if (d) {d.dispose();}
     });
     this._disposables = [];
   }
@@ -378,7 +380,7 @@ export class JumpManager {
           console.log(
             "deleteChain from JumpManager.ts: rejectJump and decoration visible",
           );
-          NextEditProvider.getInstance().deleteChain();
+          void NextEditProvider.getInstance().deleteChain();
           await this.clearJumpDecoration();
         }
       },

@@ -30,7 +30,7 @@ export async function addCurrentSelectionToEdit({
 
   // If there's a diff currently being applied, then we just toggle focus back to the input
   if (existingDiff) {
-    webviewProtocol?.request("focusContinueInput", undefined);
+    void webviewProtocol?.request("focusContinueInput", undefined);
     return;
   }
 
@@ -61,7 +61,7 @@ export async function addCurrentSelectionToEdit({
   const rangeInFileWithContents = getRangeInFileWithContents(true, range);
 
   if (rangeInFileWithContents) {
-    webviewProtocol?.request("setCodeToEdit", rangeInFileWithContents);
+    void webviewProtocol?.request("setCodeToEdit", rangeInFileWithContents);
 
     // Un-select the current selection
     editor.selection = new vscode.Selection(

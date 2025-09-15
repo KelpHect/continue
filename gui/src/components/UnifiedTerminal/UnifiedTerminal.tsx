@@ -220,7 +220,7 @@ function fixBackspace(txt: string) {
   let tmp = txt;
   do {
     txt = tmp;
-    tmp = txt.replace(/[^\n]\x08/gm, "");
+    tmp = txt.replace(/[^\n][\b]/gm, ""); // Use \b instead of \x08
   } while (tmp.length < txt.length);
   return txt;
 }

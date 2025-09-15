@@ -34,7 +34,7 @@ function FunctionSpecificToolCallDiv({
           historyIndex={historyIndex}
         />
       );
-    case BuiltInToolNames.SingleFindAndReplace:
+    case BuiltInToolNames.SingleFindAndReplace: {
       const edits: EditOperation[] = [
         {
           old_string: args?.old_string ?? "",
@@ -52,6 +52,7 @@ function FunctionSpecificToolCallDiv({
           historyIndex={historyIndex}
         />
       );
+    }
     case BuiltInToolNames.MultiEdit:
       return (
         <FindAndReplaceDisplay

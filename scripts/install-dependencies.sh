@@ -31,7 +31,7 @@ echo "Installing root-level dependencies..."
 npm install
 
 echo "Building packages (fetch, openai-adapters, config-yaml)..."
-node ./scripts/build-packages.js
+node ./scripts/build-packages.cjs
 
 echo "Installing Core extension dependencies..."
 pushd core

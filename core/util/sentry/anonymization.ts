@@ -25,7 +25,7 @@ export function anonymizeFilePath(filePath: string): string {
 
   // Keep node_modules package names for debugging
   if (normalized.includes("node_modules")) {
-    const match = normalized.match(/node_modules\/([^\/]+)/);
+    const match = normalized.match(/node_modules\/([^/]+)/);
     if (match) {
       return `node_modules/${match[1]}/<file>`;
     }

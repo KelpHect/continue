@@ -191,7 +191,7 @@ class WatsonX extends BaseLLM {
       truncate_input_tokens: this.contextLength - (options.maxTokens ?? 1024),
       repetition_penalty: options.frequencyPenalty || 1,
     };
-    if (!!options.temperature) {
+    if (options.temperature) {
       parameters.decoding_method = "sample";
       parameters.temperature = options.temperature;
       parameters.top_p = options.topP || 1.0;
@@ -266,13 +266,13 @@ class WatsonX extends BaseLLM {
       payload.project_id = this.projectId;
     }
 
-    if (!!options.temperature) {
+    if (options.temperature) {
       payload.temperature = options.temperature;
     }
-    if (!!options.topP) {
+    if (options.topP) {
       payload.top_p = options.topP;
     }
-    if (!!options.tools) {
+    if (options.tools) {
       payload.tools = options.tools;
       if (options.toolChoice) {
         payload.tool_choice = options.toolChoice;
@@ -294,21 +294,21 @@ class WatsonX extends BaseLLM {
 
     for await (const value of streamSse(response)) {
       const message = fromChatCompletionChunk(value);
-      if (!!message) {
+      if (message) {
         if (
           (message as AssistantChatMessage)?.toolCalls &&
           (message as AssistantChatMessage).toolCalls?.length !== 0
         ) {
           let chunk = message as AssistantChatMessage;
-          if (!!chunk.toolCalls?.[0]?.id) {
+          if (chunk.toolCalls?.[0]?.id) {
             toolCallId = chunk.toolCalls?.[0]?.id;
           }
-          if (!!chunk.toolCalls?.[0]?.function?.name) {
+          if (chunk.toolCalls?.[0]?.function?.name) {
             accumulatedArgs = "";
             toolName = chunk.toolCalls[0].function.name;
             continue;
           }
-          if (!!toolName) {
+          if (toolName) {
             if (value?.choices?.[0]?.finish_reason === "tool_calls") {
               // If final assistant message has "tool_calls" as finish_reason
               let args: string | undefined;
@@ -326,7 +326,7 @@ class WatsonX extends BaseLLM {
               };
               chunk.toolCalls = [toolCall as ToolCallDelta];
             } else {
-              if (!!chunk.toolCalls?.[0]?.function?.arguments)
+              if (chunk.toolCalls?.[0]?.function?.arguments)
                 accumulatedArgs += chunk.toolCalls?.[0]?.function?.arguments;
               continue;
             }

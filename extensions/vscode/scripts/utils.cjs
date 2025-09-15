@@ -4,7 +4,7 @@ const path = require("path");
 const ncp = require("ncp").ncp;
 const { rimrafSync } = require("rimraf");
 
-const { execCmdSync } = require("../../../scripts/util/index");
+const { execCmdSync } = require("../../../scripts/util/index.cjs");
 
 const continueDir = path.join(__dirname, "..", "..", "..");
 

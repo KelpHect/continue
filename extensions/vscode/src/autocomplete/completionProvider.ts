@@ -5,21 +5,21 @@ import {
   type AutocompleteOutcome,
 } from "core/autocomplete/util/types";
 import { ConfigHandler } from "core/config/ConfigHandler";
-import * as URI from "uri-js";
-import { v4 as uuidv4 } from "uuid";
-import * as vscode from "vscode";
-
-import { handleLLMError } from "../util/errorHandling";
-import { VsCodeIde } from "../VsCodeIde";
-import { VsCodeWebviewProtocol } from "../webviewProtocol";
-
 import { checkFim } from "core/nextEdit/diff/diff";
 import { NextEditLoggingService } from "core/nextEdit/NextEditLoggingService";
 import { PrefetchQueue } from "core/nextEdit/NextEditPrefetchQueue";
 import { NextEditProvider } from "core/nextEdit/NextEditProvider";
 import { NextEditOutcome } from "core/nextEdit/types";
+import * as URI from "uri-js";
+import { v4 as uuidv4 } from "uuid";
+import * as vscode from "vscode";
+
 import { JumpManager } from "../activation/JumpManager";
 import { NextEditWindowManager } from "../activation/NextEditWindowManager";
+import { handleLLMError } from "../util/errorHandling";
+import { VsCodeIde } from "../VsCodeIde";
+import { VsCodeWebviewProtocol } from "../webviewProtocol";
+
 import { GhostTextAcceptanceTracker } from "./GhostTextAcceptanceTracker";
 import { getDefinitionsFromLsp } from "./lsp";
 import { RecentlyEditedTracker } from "./recentlyEdited";
@@ -100,7 +100,7 @@ export class ContinueCompletionProvider
       this.configHandler,
       this.ide,
       getAutocompleteModel,
-      this.onError.bind(this),
+      (e: unknown) => void this.onError(e),
       getDefinitionsFromLsp,
     );
 
@@ -110,7 +110,7 @@ export class ContinueCompletionProvider
       this.configHandler,
       this.ide,
       getAutocompleteModel,
-      this.onError.bind(this),
+      (e: unknown) => void this.onError(e),
       getDefinitionsFromLsp,
       "fineTuned",
     );
@@ -355,7 +355,7 @@ export class ContinueCompletionProvider
 
           // Fill in the spot after dequeuing.
           if (!this.usingFullFileDiff) {
-            this.prefetchQueue.process({
+            void this.prefetchQueue.process({
               ...ctx,
               recentlyVisitedRanges: this.recentlyVisitedRanges.getSnippets(),
               recentlyEditedRanges:
@@ -372,11 +372,11 @@ export class ContinueCompletionProvider
 
         while (this.prefetchQueue.processedCount > 0 && !isJumpSuggested) {
           const nextItemInQueue = this.prefetchQueue.dequeueProcessed();
-          if (!nextItemInQueue) continue;
+          if (!nextItemInQueue) {continue;}
 
           // Fill in the spot after dequeuing.
           if (!this.usingFullFileDiff) {
-            this.prefetchQueue.process({
+            void this.prefetchQueue.process({
               ...ctx,
               recentlyVisitedRanges: this.recentlyVisitedRanges.getSnippets(),
               recentlyEditedRanges:
@@ -416,7 +416,7 @@ export class ContinueCompletionProvider
           console.log(
             "No suitable jump location found after trying all positions",
           );
-          this.nextEditProvider.deleteChain();
+          void this.nextEditProvider.deleteChain();
           return undefined;
         }
       } else {
@@ -442,7 +442,7 @@ export class ContinueCompletionProvider
           // Start prefetching next edits if not using full file diff.
           // NOTE: this is better off not awaited. fire and forget.
           if (!this.usingFullFileDiff) {
-            this.prefetchQueue.process(ctx);
+            void this.prefetchQueue.process(ctx);
           }
 
           // If initial outcome is null, suggest a jump instead.
@@ -618,7 +618,7 @@ export class ContinueCompletionProvider
       if (isFim) {
         if (!fimText) {
           console.log("deleteChain from completionProvider.ts: !fimText");
-          this.nextEditProvider.deleteChain();
+          void this.nextEditProvider.deleteChain();
           return undefined;
         }
 
@@ -657,7 +657,7 @@ export class ContinueCompletionProvider
         console.log(
           "deleteChain from completionProvider.ts: diffLines.length === 0",
         );
-        NextEditProvider.getInstance().deleteChain();
+        void NextEditProvider.getInstance().deleteChain();
       }
 
       if (NextEditWindowManager.isInstantiated()) {

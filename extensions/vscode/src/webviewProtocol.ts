@@ -129,13 +129,13 @@ export class VsCodeWebviewProtocol
               .showInformationMessage(message, "Add API Key", "Use Local Model")
               .then((selection) => {
                 if (selection === "Add API Key") {
-                  this.request("setupApiKey", undefined);
+                  void this.request("setupApiKey", undefined);
                 } else if (selection === "Use Local Model") {
-                  this.request("setupLocalConfig", undefined);
+                  void this.request("setupLocalConfig", undefined);
                 }
               });
           } else {
-            Telemetry.capture(
+            void Telemetry.capture(
               "webview_protocol_error",
               {
                 messageType: msg.messageType,
@@ -172,34 +172,37 @@ export class VsCodeWebviewProtocol
     retry: boolean = true,
   ): Promise<ToWebviewProtocol[T][1]> {
     const messageId = uuidv4();
-    return new Promise(async (resolve) => {
-      if (retry) {
-        let i = 0;
-        while (!this.webview) {
-          if (i >= 10) {
-            resolve(undefined);
-            return;
-          } else {
-            await new Promise((res) => setTimeout(res, i >= 5 ? 1000 : 500));
-            i++;
+    return new Promise((resolve) => {
+      const runAsync = async () => {
+        if (retry) {
+          let i = 0;
+          while (!this.webview) {
+            if (i >= 10) {
+              resolve(undefined);
+              return;
+            } else {
+              await new Promise((res) => setTimeout(res, i >= 5 ? 1000 : 500));
+              i++;
+            }
           }
         }
-      }
 
-      this.send(messageType, data, messageId);
+        this.send(messageType, data, messageId);
 
-      if (this.webview) {
-        const disposable = this.webview.onDidReceiveMessage(
-          (msg: Message<ToWebviewProtocol[T][1]>) => {
-            if (msg.messageId === messageId) {
-              resolve(msg.data);
-              disposable?.dispose();
-            }
-          },
-        );
-      } else if (!retry) {
-        resolve(undefined);
-      }
+        if (this.webview) {
+          const disposable = this.webview.onDidReceiveMessage(
+            (msg: Message<ToWebviewProtocol[T][1]>) => {
+              if (msg.messageId === messageId) {
+                resolve(msg.data);
+                disposable?.dispose();
+              }
+            },
+          );
+        } else if (!retry) {
+          resolve(undefined);
+        }
+      };
+      void runAsync();
     });
   }
 }

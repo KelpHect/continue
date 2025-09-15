@@ -8,7 +8,7 @@ const path = require("path");
 
 const ncp = require("ncp").ncp;
 
-const { execCmdSync } = require("../../../scripts/util");
+const { execCmdSync } = require("../../../scripts/util/index.cjs");
 
 async function installNodeModuleInTempDirAndCopyToCurrent(packageName, toCopy) {
   console.log(`Copying ${packageName} to ${toCopy}`);

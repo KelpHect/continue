@@ -1,3 +1,4 @@
+import { GlobalContext } from "core/util/GlobalContext";
 import { getContinueRcPath, getTsConfigPath } from "core/util/paths";
 import { Telemetry } from "core/util/posthog";
 import * as vscode from "vscode";
@@ -5,7 +6,6 @@ import * as vscode from "vscode";
 import { VsCodeExtension } from "../extension/VsCodeExtension";
 import { getExtensionVersion, isUnsupportedPlatform } from "../util/util";
 
-import { GlobalContext } from "core/util/GlobalContext";
 import { VsCodeContinueApi } from "./api";
 import setupInlineTips from "./InlineTipManager";
 

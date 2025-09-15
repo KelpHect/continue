@@ -5,7 +5,7 @@ const path = require("path");
 const { ProxyAgent } = require("undici");
 const { rimrafSync } = require("rimraf");
 
-const { execCmdSync } = require("../../../scripts/util");
+const { execCmdSync } = require("../../../scripts/util/index.cjs");
 
 /**
  * download a file using fetch API

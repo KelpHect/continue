@@ -9,8 +9,8 @@ import {
   indexDecorationType,
 } from "./decorations";
 
-import type { ApplyState, DiffLine } from "core";
 import type { VerticalDiffCodeLens } from "./manager";
+import type { ApplyState, DiffLine } from "core";
 
 export interface VerticalDiffHandlerOptions {
   input?: string;
@@ -70,7 +70,7 @@ export class VerticalDiffHandler implements vscode.Disposable {
         this.refreshCodeLens();
 
         // Handle any lines received while editor was closed
-        this.queueDiffLine(undefined);
+        void this.queueDiffLine(undefined);
       }
     });
     this.disposables.push(disposable);

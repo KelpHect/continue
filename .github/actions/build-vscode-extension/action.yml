@@ -77,7 +77,7 @@ runs:
 
     - name: Build packages
       shell: bash
-      run: node ./scripts/build-packages.js
+      run: node ./scripts/build-packages.cjs
 
     - name: Install extension dependencies
       shell: bash

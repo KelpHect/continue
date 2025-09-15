@@ -17,13 +17,13 @@ export async function setupRemoteConfigSync(reloadConfig: () => void) {
   ) {
     return;
   }
-  getUserToken().then(async (token) => {
+  void getUserToken().then(async (token) => {
     await vscode.workspace
       .getConfiguration(EXTENSION_NAME)
       .update("userToken", token, vscode.ConfigurationTarget.Global);
     try {
       const configSync = new RemoteConfigSync(reloadConfig, token);
-      configSync.setup();
+      void configSync.setup();
     } catch (e) {
       console.warn(`Failed to sync remote config: ${e}`);
     }

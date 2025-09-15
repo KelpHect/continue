@@ -42,7 +42,7 @@ export function ToolCallDisplay({
             {!!toolCallState.output && (
               <ToolTruncateHistoryIcon historyIndex={historyIndex} />
             )}
-            {!!args.length ? (
+            {args.length ? (
               <ArgsToggleIcon
                 isShowing={argsExpanded}
                 setIsShowing={setArgsExpanded}

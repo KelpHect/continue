@@ -52,8 +52,6 @@ function normalizeDisplayedDiff(d: string): string {
 async function expectDiff(file: string) {
   const testFilePath = path.join(
     __dirname,
-    "edit",
-    "lazy",
     "test-examples",
     file + ".diff",
   );

@@ -100,7 +100,7 @@ export class RemoteConfigSync {
         if (!this.userToken || !this.remoteConfigServerUrl) {
           return;
         }
-        this.sync(this.userToken, this.remoteConfigServerUrl);
+        void this.sync(this.userToken, this.remoteConfigServerUrl);
       },
       this.remoteConfigSyncPeriod * 1000 * 60,
     );

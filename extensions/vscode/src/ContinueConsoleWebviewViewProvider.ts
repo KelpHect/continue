@@ -157,7 +157,10 @@ export class ContinueConsoleWebviewViewProvider
 
     const inDevelopmentMode =
       context?.extensionMode === vscode.ExtensionMode.Development;
-    if (!inDevelopmentMode) {
+    if (inDevelopmentMode) {
+      scriptUri = "http://localhost:5173/src/console.tsx";
+      styleMainUri = "http://localhost:5173/src/indexConsole.css";
+    } else {
       scriptUri = panel.webview
         .asWebviewUri(
           vscode.Uri.joinPath(extensionUri, "gui/assets/indexConsole.js"),
@@ -168,9 +171,6 @@ export class ContinueConsoleWebviewViewProvider
           vscode.Uri.joinPath(extensionUri, "gui/assets/indexConsole.css"),
         )
         .toString();
-    } else {
-      scriptUri = "http://localhost:5173/src/console.tsx";
-      styleMainUri = "http://localhost:5173/src/indexConsole.css";
     }
 
     panel.webview.options = {

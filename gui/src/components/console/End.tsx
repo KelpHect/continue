@@ -24,7 +24,6 @@ export default function Start({ item }: StartProps) {
           {item.message}
         </div>
       );
-      break;
     case "cancel":
       return (
         <div>
