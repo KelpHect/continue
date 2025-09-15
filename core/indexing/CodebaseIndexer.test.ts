@@ -1,4 +1,4 @@
-/* eslint-disable max-lines-per-function */
+ 
 /* lint is not useful for test classes */
 import { vi, type MockInstance } from "vitest";
 import { execSync } from "node:child_process";

@@ -27,7 +27,7 @@ export default class RerankerRetrievalPipeline extends BaseRetrievalPipeline {
 
     let embeddingsChunks: Chunk[] = [];
     try {
-      embeddingsChunks = Boolean(config.selectedModelByRole.embed)
+      embeddingsChunks = config.selectedModelByRole.embed
         ? await this.retrieveEmbeddings(input, nRetrieve)
         : [];
     } catch (error) {

@@ -3,7 +3,7 @@ import { countTokens } from "../../../llm/countTokens";
 import { AutocompleteSnippetDeprecated } from "../../types";
 import { HelperVars } from "../../util/HelperVars";
 
-const rx = /[\s.,\/#!$%\^&\*;:{}=\-_`~()\[\]]/g;
+const rx = /[\s.,/#!$%^&*;:{}=\-_`~()[\]]/g;
 export function getSymbolsForSnippet(snippet: string): Set<string> {
   const symbols = snippet
     .split(rx)
@@ -147,7 +147,6 @@ export function fillPromptWithSnippets(
     if (tokensRemaining - tokenCount >= 0) {
       tokensRemaining -= tokenCount;
       keptSnippets.push(snippet);
-    } else {
     }
   }
 
