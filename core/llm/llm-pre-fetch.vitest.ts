@@ -60,6 +60,38 @@ describe("LLM Pre-fetch", () => {
     vi.resetAllMocks();
     // Log to verify the mock is properly set up
     console.log("Mock setup:", openAiAdapters);
+    console.log("fetchwithRequestOptions mock:", fetchwithRequestOptions);
+    
+    // Set up the mock implementation explicitly with a simple working response
+    vi.mocked(fetchwithRequestOptions).mockResolvedValue({
+      ok: true,
+      status: 200,
+      statusText: "OK",
+      headers: new Headers(),
+      url: "https://test.com",
+      redirected: false,
+      type: "basic",
+      body: {
+        // Mock readable stream that can be iterated
+        [Symbol.asyncIterator]: async function* () {
+          yield new TextEncoder().encode('data: {"choices":[{"delta":{"content":"test"}}]}\n\n');
+        },
+        // Mock other body methods
+        getReader: () => ({
+          read: () => Promise.resolve({ done: true, value: undefined })
+        })
+      },
+      bodyUsed: false,
+      clone: () => ({} as any),
+      arrayBuffer: () => Promise.resolve(new ArrayBuffer(0)),
+      blob: () => Promise.resolve(new Blob()),
+      formData: () => Promise.resolve(new FormData()),
+      json: () => Promise.resolve({}),
+      text: () => Promise.resolve(""),
+      size: 0,
+      buffer: () => Promise.resolve(Buffer.from("")),
+      textConverted: () => Promise.resolve(""),
+    } as any);
   });
 
   test("Invalid tool call args are ignored", async () => {
