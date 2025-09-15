@@ -15,12 +15,13 @@ const Result = memo(function Result({ result, prevResult }: ResultProps) {
     case "message":
       switch (result.message.role) {
         case "assistant":
-        case "thinking":
+        case "thinking": {
           const includeRole = !(
             prevResult?.kind === "message" &&
             prevResult.message.role === result.message.role
           );
           return renderMessage(result.message, includeRole);
+        }
         default:
           // We don't expect anything but AssistantChatMessages and ThinkingChatMessages in the reply
           // from the LLM output, but log them if they do occur.

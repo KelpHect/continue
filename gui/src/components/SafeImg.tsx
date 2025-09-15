@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-interface SafeImg {
+interface SafeImgProps {
   src: string;
   height?: string;
   width?: string;
@@ -8,7 +8,7 @@ interface SafeImg {
   fallback: React.ReactNode;
 }
 
-const SafeImg: React.FC<SafeImg> = ({
+const SafeImg: React.FC<SafeImgProps> = ({
   src,
   height,
   width,
