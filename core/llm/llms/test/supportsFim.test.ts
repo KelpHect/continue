@@ -9,7 +9,25 @@ import Vllm from "../Vllm.js";
 
 // Mock the parseProxyModelName function
 vi.mock("@continuedev/config-yaml", () => ({
-  parseProxyModelName: vi.fn(),
+  parseProxyModelName: vi.fn().mockImplementation((model: string) => {
+    // Extract provider from model string like "owner/package/provider/model"
+    const parts = model.split('/');
+    if (parts.length >= 3) {
+      return {
+        provider: parts[2],
+        model: parts.slice(3).join('/') || 'model',
+        ownerSlug: parts[0],
+        packageSlug: parts[1],
+      };
+    }
+    // Fallback for simpler model strings
+    return {
+      provider: 'unknown',
+      model: model,
+      ownerSlug: 'owner',
+      packageSlug: 'package',
+    };
+  }),
   decodeSecretLocation: vi.fn(),
   SecretType: { NotFound: "not-found" },
 }));
