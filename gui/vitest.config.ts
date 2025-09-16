@@ -13,6 +13,7 @@ export default defineConfig({
       'minimatch': 'minimatch',
       'zod': 'zod',
       'partial-json': 'partial-json',
+      'uri-js': 'uri-js',
     }
   },
   ssr: {
@@ -22,6 +23,7 @@ export default defineConfig({
       'minimatch', 
       'zod', 
       'partial-json',
+      'uri-js',
       '@continuedev/config-yaml',
       '@continuedev/terminal-security',
       '@continuedev/config-types'
