@@ -19,11 +19,6 @@ import { getBaseSystemMessage } from "../util/getBaseSystemMessage";
 // Removed: shouldAutoEnableSystemMessageTools - let it run naturally
 
 // Additional mocks for streamResponseThunk
-  default: {
-    capture: vi.fn(),
-  },
-}));
-
 vi.mock("uuid", () => ({
   v4: vi.fn(() => "mock-uuid-123"),
 }));

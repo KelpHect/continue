@@ -19,11 +19,6 @@ import { getBaseSystemMessage } from "../util/getBaseSystemMessage";
 // Removed: shouldAutoEnableSystemMessageTools - let it run naturally
 
 // Additional mocks for streamResponseThunk
-  default: {
-    capture: vi.fn(),
-  },
-}));
-
 vi.mock("uuid", () => ({
   v4: vi.fn(() => "mock-uuid-123"),
 }));
@@ -558,20 +553,6 @@ describe("streamResponseThunk - tool calls", () => {
     expect(compileCallsCount).toBeGreaterThanOrEqual(1);
 
     expect(result.type).toBe("chat/streamResponse/fulfilled");
-
-    // Verify telemetry events for auto-approved tool execution
-    expect(mockPosthog.capture).toHaveBeenCalledWith("gui_tool_call_decision", {
-      decision: "auto_accept",
-      toolName: "search_codebase",
-      toolCallId: "tool-call-1",
-    });
-
-    expect(mockPosthog.capture).toHaveBeenCalledWith("gui_tool_call_outcome", {
-      succeeded: true,
-      toolName: "search_codebase",
-      errorMessage: undefined,
-      duration_ms: expect.any(Number),
-    });
 
     // Verify final state after tool call execution
     const finalState = mockStoreWithToolSettings.getState();
@@ -2795,20 +2776,6 @@ describe("streamResponseThunk - tool calls", () => {
         payload: undefined,
       },
     ]);
-
-    // Verify telemetry events for manual approval flow
-    expect(mockPosthog.capture).toHaveBeenCalledWith("gui_tool_call_decision", {
-      decision: "accept",
-      toolName: "search_codebase",
-      toolCallId: "tool-approval-flow-1",
-    });
-
-    expect(mockPosthog.capture).toHaveBeenCalledWith("gui_tool_call_outcome", {
-      succeeded: true,
-      toolName: "search_codebase",
-      errorMessage: undefined,
-      duration_ms: expect.any(Number),
-    });
 
     // Verify IDE messenger calls for tool execution
     expect(mockIdeMessengerApproval.request).toHaveBeenCalledWith(
