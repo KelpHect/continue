@@ -25,6 +25,9 @@
   "tabAutocompleteOptions": {
     "useCache": false
   },
+  "experimental": {
+    "nextEdit": false
+  },
   "contextProviders": [
     {
       "name": "docs"
