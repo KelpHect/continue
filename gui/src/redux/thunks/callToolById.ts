@@ -1,7 +1,6 @@
 import { createAsyncThunk, unwrapResult } from "@reduxjs/toolkit";
 import { ContextItem } from "core";
 import { CLIENT_TOOLS_IMPLS } from "core/tools/builtIn";
-import posthog from "posthog-js";
 import { callClientTool } from "../../util/clientTools/callClientTool";
 import { selectSelectedChatModel } from "../slices/configSlice";
 import {
@@ -42,12 +41,6 @@ export const callToolById = createAsyncThunk<
     toolCallState.tool?.defaultToolPolicy ??
     DEFAULT_TOOL_SETTING;
   const isAutoApproved = toolPolicy === "allowedWithoutPermission";
-
-  posthog.capture("gui_tool_call_decision", {
-    decision: isAutoApproved ? "auto_accept" : "accept",
-    toolName: toolCallState.toolCall.function.name,
-    toolCallId: toolCallId,
-  });
 
   const selectedChatModel = selectSelectedChatModel(state);
 
@@ -125,15 +118,6 @@ export const callToolById = createAsyncThunk<
       }),
     );
   }
-
-  // Capture telemetry for tool call execution outcome with duration
-  const duration_ms = Date.now() - startTime;
-  posthog.capture("gui_tool_call_outcome", {
-    succeeded: errorMessage === undefined,
-    toolName: toolCallState.toolCall.function.name,
-    errorMessage: errorMessage,
-    duration_ms: duration_ms,
-  });
 
   if (streamResponse) {
     if (errorMessage) {

@@ -1,5 +1,4 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import posthog from "posthog-js";
 import StreamErrorDialog from "../../pages/gui/StreamError";
 import { analyzeError } from "../../util/errorAnalysis";
 import { selectSelectedChatModel } from "../slices/configSlice";
@@ -45,7 +44,5 @@ export const streamThunkWrapper = createAsyncThunk<
       model_provider: providerName,
       model_title: modelTitle,
     };
-
-    posthog.capture("gui_stream_error", errorData);
   }
 });

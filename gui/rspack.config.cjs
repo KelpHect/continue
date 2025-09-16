@@ -1,6 +1,5 @@
 const { HtmlRspackPlugin, CopyRspackPlugin } = require("@rspack/core");
 const ReactRefreshPlugin = require("@rspack/plugin-react-refresh");
-const { sentryWebpackPlugin } = require("@sentry/webpack-plugin");
 const { resolve } = require("path");
 
 const isDev = process.env.NODE_ENV === "development";
@@ -105,12 +104,6 @@ module.exports = {
         },
       ],
     }),
-    // Add Sentry plugin for production builds
-    ...(!isDev ? [sentryWebpackPlugin({
-      org: "continue-xd",
-      project: "continue",
-      authToken: process.env.SENTRY_AUTH_TOKEN,
-    })] : []),
     ...(isDev ? [new ReactRefreshPlugin()] : []),
   ],
   devServer: {
