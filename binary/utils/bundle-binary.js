@@ -5,13 +5,13 @@
 const {
   execCmdSync,
   autodetectPlatformAndArch,
-} = require("../../scripts/util");
+} = require("../../scripts/util/index.cjs");
 const { downloadRipgrep } = require("./ripgrep");
 const { TARGET_TO_LANCEDB } = require("../utils/targets");
 const fs = require("fs");
 const {
   downloadSqlite,
-} = require("../../extensions/vscode/scripts/download-copy-sqlite-esbuild");
+} = require("../../extensions/vscode/scripts/download-copy-sqlite-esbuild.cjs");
 const { fork } = require("child_process");
 
 async function downloadNodeSqlite(target, targetDir) {

@@ -3,12 +3,12 @@ const fs = require("fs");
 const path = require("path");
 const ncp = require("ncp").ncp;
 const { rimrafSync } = require("rimraf");
-const { validateFilesPresent } = require("../scripts/util");
+const { validateFilesPresent } = require("../scripts/util/index.cjs");
 const { ALL_TARGETS, TARGET_TO_LANCEDB } = require("./utils/targets");
 const { fork } = require("child_process");
 const {
   installAndCopyNodeModules,
-} = require("../extensions/vscode/scripts/install-copy-nodemodule");
+} = require("../extensions/vscode/scripts/install-copy-nodemodule.cjs");
 const { bundleBinary } = require("./utils/bundle-binary");
 
 const bin = path.join(__dirname, "bin");

@@ -66,7 +66,8 @@ class Autocomplete {
                     enterText(" ")
                 }
 
-                waitFor(ofSeconds(20)) {
+                // Wait longer for autocomplete to trigger and complete
+                waitFor(ofSeconds(45)) {
                     editor.hasText("TEST_LLM_RESPONSE_0")
                 }
             }

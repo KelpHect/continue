@@ -86,7 +86,7 @@ process.on("message", (msg) => {
 async function generateAndCopyConfigYamlSchema() {
   // Generate and copy over config-yaml-schema.json
   const generateConfigYamlChild = fork(
-    path.join(__dirname, "generate-copy-config.js"),
+    path.join(__dirname, "generate-copy-config.cjs"),
     {
       stdio: "inherit",
     },
@@ -104,7 +104,7 @@ async function generateAndCopyConfigYamlSchema() {
 
   // Copy config schemas to intellij
   const copyConfigSchemaChild = fork(
-    path.join(__dirname, "generate-copy-config.js"),
+    path.join(__dirname, "generate-copy-config.cjs"),
     {
       stdio: "inherit",
     },

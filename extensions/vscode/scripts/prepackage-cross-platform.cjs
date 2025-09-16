@@ -14,7 +14,7 @@ const {
   autodetectPlatformAndArch,
 } = require("../../../scripts/util/index.cjs");
 
-const { generateAndCopyConfigYamlSchema } = require("./generate-copy-config");
+const { generateAndCopyConfigYamlSchema } = require("./generate-copy-config.cjs");
 const { npmInstall } = require("./npm-install");
 const {
   buildGui,

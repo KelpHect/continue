@@ -1,5 +1,4 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import posthog from "posthog-js";
 import {
   cancelToolCall as cancelToolCallAction,
   updateToolCallOutput,
@@ -22,15 +21,6 @@ export const cancelToolCallThunk = createAsyncThunk<
   const continueAfterToolRejection =
     state.config.config.ui?.continueAfterToolRejection;
   const toolCallState = findToolCallById(state.session.history, toolCallId);
-
-  if (toolCallState) {
-    // Track tool call rejection
-    posthog.capture("gui_tool_call_decision", {
-      decision: "reject",
-      toolName: toolCallState.toolCall.function.name,
-      toolCallId: toolCallId,
-    });
-  }
 
   if (continueAfterToolRejection) {
     // Update tool call output with rejection message

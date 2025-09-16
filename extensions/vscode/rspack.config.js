@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const { writeBuildTimestamp } = require("./scripts/utils");
+const { writeBuildTimestamp } = require("./scripts/utils.cjs");
 
 // Check environment for sourcemap mode
 const isDev = process.env.NODE_ENV === "development" || process.argv.includes("--mode=development");

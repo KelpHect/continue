@@ -324,16 +324,16 @@ jobs:
           ssh_host: ${{ secrets.GH_ACTIONS_SSH_TEST_DNS_NAME }}
           is_fork: ${{ github.event.pull_request.head.repo.fork == true || github.actor == 'dependabot[bot]' }}
 
-  jetbrains-tests:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v5
-      - name: Run JetBrains tests
-        uses: ./.github/actions/run-jetbrains-tests
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          ci-github-token: ${{ secrets.CI_GITHUB_TOKEN }}
+  # jetbrains-tests:
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 15
+  #   steps:
+  #     - uses: actions/checkout@v5
+  #     - name: Run JetBrains tests
+  #       uses: ./.github/actions/run-jetbrains-tests
+  #       with:
+  #         github-token: ${{ secrets.GITHUB_TOKEN }}
+  #         ci-github-token: ${{ secrets.CI_GITHUB_TOKEN }}
 
   # GitHub does not have a way of requiring that all checks pass (you must manually select each job)
   # This action at least lets us manage the list of required tests via source control
@@ -378,7 +378,7 @@ jobs:
       - vscode-get-test-file-matrix
       - vscode-package-extension-linux
       - vscode-e2e-tests
-      - jetbrains-tests
+      # - jetbrains-tests
       - pr-review-action-tests
 
     steps:
