@@ -46,7 +46,13 @@ export async function renderWithProviders(
   const user = userEvent.setup();
 
   const Wrapper = ({ children }: PropsWithChildren) => (
-    <MemoryRouter {...routerProps}>
+    <MemoryRouter 
+      future={{
+        v7_startTransition: true,
+        v7_relativeSplatPath: true,
+      }}
+      {...routerProps}
+    >
       <IdeMessengerProvider messenger={ideMessenger}>
         <Provider store={store}>
           <AuthProvider>

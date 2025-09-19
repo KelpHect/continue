@@ -44,7 +44,12 @@ const router = createMemoryRouter([
       },
     ],
   },
-]);
+], {
+  future: {
+    v7_startTransition: true,
+    v7_relativeSplatPath: true,
+  },
+});
 
 /*
   ParallelListeners prevents entire app from rerendering on any change in the listeners,
