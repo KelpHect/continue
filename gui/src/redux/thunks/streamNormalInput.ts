@@ -1,5 +1,6 @@
 import { createAsyncThunk, unwrapResult } from "@reduxjs/toolkit";
 import {
+  ChatMessage,
   ContextItem,
   LLMFullCompletionOptions,
   PromptLog,
