@@ -327,7 +327,8 @@ export const streamNormalInput = createAsyncThunk<
 
     // Attach prompt log and end thinking for reasoning models
     if (next.done && next.value) {
-      dispatch(addPromptCompletionPair([next.value]));
+      // next.value is PromptLog when done, wrap it in array for addPromptCompletionPair
+      dispatch(addPromptCompletionPair([next.value as PromptLog]));
 
       try {
         extra.ideMessenger.post("devdata/log", {

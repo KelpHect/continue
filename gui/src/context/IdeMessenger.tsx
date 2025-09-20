@@ -255,10 +255,12 @@ export class IdeMessenger implements IIdeMessenger {
 
     let next = await gen.next();
     while (!next.done) {
-      yield next.value;
+      // next.value is ChatMessage[] when yielding from streamRequest
+      yield next.value as ChatMessage[];
       next = await gen.next();
     }
-    return next.value;
+    // next.value is PromptLog | undefined when done
+    return next.value as PromptLog | undefined;
   }
 }
 
