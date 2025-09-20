@@ -10,6 +10,7 @@ import { IdeMessengerProvider } from "../../context/IdeMessenger";
 import { MockIdeMessenger } from "../../context/MockIdeMessenger";
 import ParallelListeners from "../../hooks/ParallelListeners";
 import { setupStore } from "../../redux/store";
+import { ROUTER_FUTURE } from "../routerFuture";
 // As a basic setup, import your same slice reducers
 
 // This type interface extends the default options for render from RTL, as well
@@ -48,10 +49,7 @@ export async function renderWithProviders(
   const Wrapper = ({ children }: PropsWithChildren) => (
     <MemoryRouter 
       {...routerProps}
-      future={{
-        v7_startTransition: true,
-        v7_relativeSplatPath: true,
-      }}
+      {...ROUTER_FUTURE}
     >
       <IdeMessengerProvider messenger={ideMessenger}>
         <Provider store={store}>
