@@ -206,7 +206,8 @@ export class IdeMessenger implements IIdeMessenger {
           done = true;
           returnVal = responseData.content;
         } else {
-          buffer.push(responseData.content);
+          // When done is false, content is of yield type
+          buffer.push(responseData.content as GeneratorYieldType<FromWebviewProtocol[T][1]>);
         }
       }
     };
