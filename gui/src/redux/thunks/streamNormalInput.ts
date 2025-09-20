@@ -2,6 +2,7 @@ import { createAsyncThunk, unwrapResult } from "@reduxjs/toolkit";
 import {
   ContextItem,
   LLMFullCompletionOptions,
+  PromptLog,
   Tool,
   ToolCallState,
 } from "core";
@@ -321,13 +322,14 @@ export const streamNormalInput = createAsyncThunk<
         break;
       }
 
-      dispatch(streamUpdate(next.value));
+      dispatch(streamUpdate(next.value as ChatMessage[]));
       next = await gen.next();
     }
 
     // Attach prompt log and end thinking for reasoning models
     if (next.done && next.value) {
-      dispatch(addPromptCompletionPair([next.value]));
+      // next.value is PromptLog when done, wrap it in array for addPromptCompletionPair
+      dispatch(addPromptCompletionPair([next.value as PromptLog]));
 
       try {
         extra.ideMessenger.post("devdata/log", {

@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
@@ -5,6 +6,9 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/test/vitest.setup.ts'],
+    typecheck: {
+      enabled: false
+    }
   },
   resolve: {
     alias: {

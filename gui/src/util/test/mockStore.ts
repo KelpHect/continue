@@ -112,11 +112,12 @@ export const createMockStore = (initialState?: Partial<RootState>) => {
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         serializableCheck: {
-          ignoredPaths: ["session.streamAborter"],
+          ignoredPaths: ["session.streamAborter", "ui.dialogMessage"],
           ignoredActions: [
             "chat/streamNormalInput/pending",
             "chat/streamNormalInput/fulfilled",
             "chat/streamNormalInput/rejected",
+            "ui/setDialogMessage",
           ],
         },
         thunk: {
