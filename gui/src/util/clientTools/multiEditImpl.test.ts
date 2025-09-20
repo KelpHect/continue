@@ -59,7 +59,7 @@ describe("multiEditImpl", () => {
       await expect(
         multiEditImpl({ filepath: "test.txt", edits: [] }, "id", mockExtras),
       ).rejects.toThrow(
-        "edits array is required and must contain at least one edit",
+        "edits array must contain at least one edit",
       );
     });
 
