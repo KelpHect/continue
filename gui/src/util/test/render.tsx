@@ -47,11 +47,11 @@ export async function renderWithProviders(
 
   const Wrapper = ({ children }: PropsWithChildren) => (
     <MemoryRouter 
+      {...routerProps}
       future={{
         v7_startTransition: true,
         v7_relativeSplatPath: true,
       }}
-      {...routerProps}
     >
       <IdeMessengerProvider messenger={ideMessenger}>
         <Provider store={store}>
