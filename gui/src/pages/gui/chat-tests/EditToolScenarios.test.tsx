@@ -80,6 +80,9 @@ test(
     // Mock context/getSymbolsForFiles to prevent errors during streaming
     ideMessenger.responses["context/getSymbolsForFiles"] = {};
 
+    // Mock getOpenFiles for editToolImpl
+    ideMessenger.responses["getOpenFiles"] = [];
+
     const messengerPostSpy = vi.spyOn(ideMessenger, "post");
     const messengerRequestSpy = vi.spyOn(ideMessenger, "request");
 
