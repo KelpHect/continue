@@ -2,6 +2,7 @@ import { createAsyncThunk, unwrapResult } from "@reduxjs/toolkit";
 import {
   ContextItem,
   LLMFullCompletionOptions,
+  PromptLog,
   Tool,
   ToolCallState,
 } from "core";
@@ -321,7 +322,7 @@ export const streamNormalInput = createAsyncThunk<
         break;
       }
 
-      dispatch(streamUpdate(next.value));
+      dispatch(streamUpdate(next.value as ChatMessage[]));
       next = await gen.next();
     }
 
