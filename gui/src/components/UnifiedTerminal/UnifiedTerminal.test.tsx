@@ -1,5 +1,6 @@
 import { screen, waitFor } from "@testing-library/react";
 import { ToolCallState } from "core";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 import { renderWithProviders } from "../../util/test/render";
 import { UnifiedTerminalCommand } from "./UnifiedTerminal";
 

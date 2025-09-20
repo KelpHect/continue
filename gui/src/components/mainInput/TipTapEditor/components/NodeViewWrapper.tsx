@@ -11,9 +11,10 @@ interface NodeViewWrapperProps {
 export const NodeViewWrapper: React.FC<NodeViewWrapperProps> = ({
   children,
 }) => {
-  // Not setting this as a "p" will cause issues with foreign keyboards
-  // See https://github.com/continuedev/continue/issues/3199
-  const nodeViewWrapperTag: TiptapNodeViewWrapperProps["as"] = "p";
+  // Using "div" instead of "p" to avoid nesting block elements inside paragraph
+  // This fixes HTML validation warnings about <pre> inside <p>
+  // See https://github.com/continuedev/continue/issues/3199 for original context
+  const nodeViewWrapperTag: TiptapNodeViewWrapperProps["as"] = "div";
 
   return (
     <TiptapNodeViewWrapper className="my-1.5" as={nodeViewWrapperTag}>

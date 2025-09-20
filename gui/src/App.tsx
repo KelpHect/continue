@@ -11,6 +11,7 @@ import History from "./pages/history";
 import Stats from "./pages/stats";
 import ThemePage from "./styles/ThemePage";
 import { ROUTES } from "./util/navigation";
+import { ROUTER_FUTURE } from "./util/routerFuture";
 
 const router = createMemoryRouter([
   {
@@ -44,7 +45,7 @@ const router = createMemoryRouter([
       },
     ],
   },
-]);
+], ROUTER_FUTURE);
 
 /*
   ParallelListeners prevents entire app from rerendering on any change in the listeners,
