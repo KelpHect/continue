@@ -26,7 +26,7 @@ export const multiEditImpl: ClientToolImpl = async (
   }
   if (!edits || !Array.isArray(edits) || edits.length === 0) {
     throw new Error(
-      "edits array is required and must contain at least one edit",
+      "edits array must contain at least one edit",
     );
   }
 

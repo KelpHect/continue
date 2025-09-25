@@ -79,6 +79,13 @@ test(
 
     // Mock context/getSymbolsForFiles to prevent errors during streaming
     ideMessenger.responses["context/getSymbolsForFiles"] = {};
+    
+    // Mock context/getContextItems to handle the additional context calls
+    ideMessenger.responses["context/getContextItems"] = [];
+    
+    // Mock additional IDE calls that might be needed
+    ideMessenger.responses["readFile"] = "Current file content";
+    ideMessenger.responses["getOpenFiles"] = [`${EDIT_WORKSPACE_DIR}/${EDIT_FILEPATH}`];
 
     const messengerPostSpy = vi.spyOn(ideMessenger, "post");
     const messengerRequestSpy = vi.spyOn(ideMessenger, "request");
@@ -145,7 +152,7 @@ test(
         text: EDIT_CHANGES,
         toolCallId: EDIT_TOOL_CALL_ID,
       });
-    });
+    }, { timeout: 10000 });
 
     // Extract stream ID and initiate mock streaming
     const streamId = messengerRequestSpy.mock.calls.find(

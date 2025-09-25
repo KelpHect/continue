@@ -74,6 +74,7 @@ jobs:
           cd core
           npm test
         env:
+          NODE_OPTIONS: "--max_old_space_size=4096"
           IGNORE_API_KEY_TESTS: ${{ steps.llm-changes.outputs.ignore_api_tests }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -110,6 +111,8 @@ jobs:
           npm run lint
 
       - name: Run tests
+        env:
+          NODE_OPTIONS: "--max_old_space_size=8192"
         run: |
           cd gui
           npm test
@@ -206,6 +209,7 @@ jobs:
           npm ci
           npm test
         env:
+          NODE_OPTIONS: "--max_old_space_size=4096"
           IGNORE_API_KEY_TESTS: ${{ steps.llm-changes.outputs.ignore_api_tests }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
